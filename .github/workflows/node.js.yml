@@ -27,6 +27,21 @@ jobs:
         run: pnpm run format:check
       - name: Build
         run: pnpm run build
-      - name: ls
-        run: ls -l
+      - uses: actions/upload-artifact@v2
+        with:
+          name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
+          path: |
+            .
+            !./node_modules
+  test:
+    needs: build
+    name: test dist/index.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v2
+        with:
+          name: group-github-activity-readme # name：需要下载的 artifact 的名称
+      - name: Display structure of downloaded files
+        run: ls -R
       - uses: ./
