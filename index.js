@@ -1,3 +1,4 @@
+// @actions/core actions 的核心库, 会被默认包含
 const core = require("@actions/core");
 const fs = require("fs");
 const path = require("path");

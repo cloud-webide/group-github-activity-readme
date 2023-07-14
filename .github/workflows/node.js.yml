@@ -17,3 +17,11 @@ jobs:
       - run: yarn
       - run: yarn run format:check
       - run: yarn run build
+  test:
+    name: test dist/index.js
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./dist/index.js
