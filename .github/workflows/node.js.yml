@@ -32,6 +32,7 @@ jobs:
           name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
           path: |
             .
+            !.git
             !./node_modules
   test:
     needs: build
