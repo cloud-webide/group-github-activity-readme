@@ -14,15 +14,15 @@ const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
 /**
- * Returns the sentence case representation
+ * 首字母大写
  * @param {String} str - the string
  *
  * @returns {String}
  */
-
 const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
 
 /**
+ * 返回 markdown 形式的链接
  * Returns a URL in markdown format for PR's and issues
  * @param {Object | String} item - holds information concerning the issue/PR
  *
@@ -75,17 +75,17 @@ const exec = (cmd, args = []) =>
   });
 
 /**
- * Make a commit
+ * Make a commit 提交代码
  *
  * @returns {Promise<void>}
  */
-
 const commitFile = async () => {
   await exec("git", ["config", "--global", "user.email", COMMIT_EMAIL]);
   await exec("git", ["config", "--global", "user.name", COMMIT_NAME]);
   await exec("git", ["add", TARGET_FILE]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  await exec("git", ["push"]);
+  // TODO:
+  // await exec("git", ["push"]);
 };
 
 const serializers = {
@@ -182,14 +182,15 @@ Toolkit.run(
       // Update README
       fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
 
+      // TODO:
       // Commit to the remote repository
-      try {
-        await commitFile();
-      } catch (err) {
-        tools.log.debug("Something went wrong");
-        return tools.exit.failure(err);
-      }
-      tools.exit.success("Wrote to README");
+      // try {
+      //   await commitFile();
+      // } catch (err) {
+      //   tools.log.debug("Something went wrong");
+      //   return tools.exit.failure(err);
+      // }
+      // tools.exit.success("Wrote to README");
     }
 
     const oldContent = readmeContent.slice(startIdx + 1, endIdx).join("\n");
