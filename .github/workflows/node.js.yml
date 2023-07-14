@@ -5,9 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     name: Generate build and check code formatting
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Use Node 16
@@ -18,10 +16,9 @@ jobs:
       - run: yarn run format:check
       - run: yarn run build
   test:
+    needs: build
     name: test dist/index.js
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: ./dist/index.js
