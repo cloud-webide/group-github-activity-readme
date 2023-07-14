@@ -14,6 +14,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run build
+      - run: yarn
+      - run: yarn run format:check
+      - run: yarn run build
