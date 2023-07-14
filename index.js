@@ -244,7 +244,7 @@ Toolkit.run(
     tools.exit.success("Pushed to remote repository");
   },
   {
-    event: ["schedule", "workflow_dispatch"],
+    event: ["schedule", "workflow_dispatch", "push"],
     secrets: ["GITHUB_TOKEN"],
   }
 );
