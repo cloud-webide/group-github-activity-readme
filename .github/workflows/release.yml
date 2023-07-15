@@ -2,45 +2,45 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/auto-release]
   pull_request:
     branches: [main]
 
 jobs:
-  build:
-    name: Generate build and check code formatting
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Cache NPM dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('./pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache-
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 7.1.0
-      - name: Install NPM dependencies
-        run: pnpm i --frozen-lockfile --ignore-scripts
-      - name: Code Style Check
-        run: pnpm run format:check
-      - name: Build
-        run: pnpm run build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
-          path: |
-            .
-            !.git
-            !./node_modules
+  # build:
+  #   name: Generate build and check code formatting
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #     - name: Cache NPM dependencies
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.npm
+  #         key: ${{ runner.OS }}-npm-cache-${{ hashFiles('./pnpm-lock.yaml') }}
+  #         restore-keys: |
+  #           ${{ runner.OS }}-npm-cache-
+  #     - uses: pnpm/action-setup@v2.2.4
+  #       with:
+  #         version: 7.1.0
+  #     - name: Install NPM dependencies
+  #       run: pnpm i --frozen-lockfile --ignore-scripts
+  #     - name: Code Style Check
+  #       run: pnpm run format:check
+  #     - name: Build
+  #       run: pnpm run build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
+  #         path: |
+  #           .
+  #           !.git
+  #           !./node_modules
 
   release-please:
-    needs: [build]
+    # needs: [build]
     name: Release Please
     runs-on: ubuntu-latest
     steps:
