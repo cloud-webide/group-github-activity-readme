@@ -131,7 +131,7 @@ Toolkit.run(
       }
 
       tools.log.debug(`${username}'s activity length is ${rowContent.length}`);
-      fs.writeFileSync(`./${username}-${TARGET_FILE}`, content.join("\n"));
+      // fs.writeFileSync(`./${username}-${TARGET_FILE}`, content.join("\n"));
       return content;
     };
 

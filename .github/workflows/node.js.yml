@@ -72,5 +72,5 @@ jobs:
         with:
           GH_USERNAMES: "yiliang114, harbin1053020115"
           GH_REPOS: "microsoft/vscode, microsoft/vscode-l10n, microsoft/vscode-test-web, coder/code-server"
-          TARGET_FILE: "README_TEST.md"
+          # TODO:
           CUSTOM_CONFIG: ${{needs.loadEnv.outputs.CONFIG}}
