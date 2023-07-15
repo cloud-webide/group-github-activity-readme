@@ -206,19 +206,21 @@ Toolkit.run(
     const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
     if (readmeActivitySection.length) {
       // 清除旧数据
-      readmeContent.splice(startIdx, startIdx + readmeActivitySection.length);
+      readmeContent.splice(startIdx, readmeActivitySection.length);
       endIdx = readmeContent.findIndex(
         (content) => content.trim() === "<!--END_SECTION:activity-->"
       );
+      tools.log.info("清除旧数据后：");
+      tools.log.info(readmeContent);
     }
 
     content.forEach((line, idx) => {
       readmeContent.splice(startIdx + idx, 0, line);
     });
-    tools.log.success(`Wrote to ${TARGET_FILE}`);
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
+    tools.log.success(`Wrote to ${TARGET_FILE}`);
     tools.log.debug(`writeFileSync: ${readmeContent.length}`);
     tools.log.debug(`${readmeContent.join("\n")}`);
 

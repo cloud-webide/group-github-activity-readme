@@ -83,27 +83,33 @@ const TARGET_FILE = "README.md";
 
   if (oldContent.trim() === newContent.trim()) {
     console.log("No changes detected");
+    return;
   }
 
   startIdx++;
 
   // Recent GitHub Activity content between the comments
   const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
+
+  console.log("readmeActivitySection", readmeActivitySection.length);
   if (readmeActivitySection.length) {
+    console.log("readmeActivitySection 存在旧数据");
     // 清除旧数据
-    readmeContent.splice(startIdx, startIdx + readmeActivitySection.length);
+    readmeContent.splice(startIdx, readmeActivitySection.length);
     endIdx = readmeContent.findIndex(
       (content) => content.trim() === "<!--END_SECTION:activity-->"
     );
+    console.log(readmeContent);
+    console.log("endIdx", endIdx);
   }
 
-  content.forEach((line, idx) => {
-    readmeContent.splice(startIdx + idx, 0, line);
-  });
+  // content.forEach((line, idx) => {
+  //   readmeContent.splice(startIdx + idx, 0, line);
+  // });
   console.log(`Wrote to ${TARGET_FILE}`);
 
-  // Update README
+  // // Update README
   fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
-  console.log(`writeFileSync: ${readmeContent.length}`);
-  console.log(`${readmeContent.join("\n")}`);
+  // console.log(`writeFileSync: ${readmeContent.length}`);
+  // console.log(`${readmeContent.join("\n")}`);
 })();
