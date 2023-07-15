@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
+const _ = require("lodash-es");
 
 const logEnabled = false;
 
@@ -91,8 +92,7 @@ const commitFile = async () => {
   await exec("git", ["config", "--global", "user.name", COMMIT_NAME]);
   await exec("git", ["add", TARGET_FILE]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  // TODO:
-  // await exec("git", ["push"]);
+  await exec("git", ["push"]);
 };
 
 const serializers = {
@@ -101,7 +101,7 @@ const serializers = {
     // core.info(JSON.stringify(item, null, 2));
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
-    )}`;
+    )} at ${new Date(item.created_at).toLocaleTimeString()}`;
   },
   IssuesEvent: (item) => {
     // core.info("IssuesEvent");
@@ -109,7 +109,9 @@ const serializers = {
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
-    )} in ${toUrlFormat(item.repo.name)}`;
+    )} in ${toUrlFormat(item.repo.name)} at ${new Date(
+      item.created_at
+    ).toLocaleTimeString()}`;
   },
   PullRequestEvent: (item) => {
     // core.info("PullRequestEvent");
@@ -118,7 +120,9 @@ const serializers = {
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
-    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
+    return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(
+      item.repo.name
+    )} at ${new Date(item.created_at).toLocaleTimeString()}`;
   },
   // ReleaseEvent: (item) => {
   //   core.info("ReleaseEvent");
@@ -146,13 +150,37 @@ Toolkit.run(
         `Activity for ${username}, ${events.data.length} events found.`
       );
 
-      const content = events.data
+      // 根据仓库和作者进行过滤排序
+      const rowContent = events.data
         // Filter out any boring activity
         .filter((event) => serializers.hasOwnProperty(event.type))
         // We only have five lines to work with
         .slice(0, MAX_LINES)
         // Call the serializer to construct a string
-        .map((item) => serializers[item.type](item));
+        .map((item) => ({
+          text: serializers[item.type](item),
+          repo: item.repo,
+          repoName: item.repo.name,
+          actor: item.actor,
+          created_at: item.created_at,
+          updated_at: item.updated_at,
+        }))
+        .sort((a, b) => (a.created_at - b.created_at > 0 ? 1 : -1));
+
+      const tempMap = {};
+      rowContent.forEach((item) => {
+        const { repoName } = item;
+        if (!tempMap[repoName]) {
+          tempMap[repoName] = [];
+        }
+        tempMap[repoName].push(item);
+      });
+      const content = [];
+      Object.keys(tempMap).forEach((repoName) => {
+        content.push(`### ${repoName}`);
+        content.push(...tempMap[repoName]);
+        content.push("");
+      });
 
       const readmeContent = fs
         .readFileSync(`./${TARGET_FILE}`, "utf-8")
