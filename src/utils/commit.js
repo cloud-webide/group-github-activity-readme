@@ -41,7 +41,7 @@ const commitFile = async (
   // await exec("git", ["add", TARGET_FILE]);
   await exec("git", ["add", "."]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  await exec("git", ["push"]);
+  // await exec("git", ["push"]);
 };
 
 module.exports = {
