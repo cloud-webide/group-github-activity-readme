@@ -215,7 +215,7 @@ Toolkit.run(
       let count = 0;
 
       readmeActivitySection.forEach((line, idx) => {
-        readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
+        readmeContent[startIdx + idx] = `${count++ + 1}. ${content[count]}`;
       });
       tools.log.success(`Updated ${TARGET_FILE} with the recent activity`);
     }
