@@ -206,11 +206,7 @@ Toolkit.run(
     // Recent GitHub Activity content between the comments
     const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
     if (!readmeActivitySection.length) {
-      content.some((line, idx) => {
-        // User doesn't have 5 public events
-        if (!line && idx === readmeActivitySection.length - 1) {
-          return true;
-        }
+      content.forEach((line, idx) => {
         readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
       });
       tools.log.success(`Wrote to ${TARGET_FILE}`);
@@ -218,16 +214,8 @@ Toolkit.run(
       // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
       let count = 0;
 
-      readmeActivitySection.some((line, idx) => {
-        // User doesn't have 5 public events
-        if (!content[count] && idx === readmeActivitySection.length - 1) {
-          return true;
-        }
-        if (line !== "") {
-          readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
-          count++;
-          core.info(count);
-        }
+      readmeActivitySection.forEach((line, idx) => {
+        readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
       });
       tools.log.success(`Updated ${TARGET_FILE} with the recent activity`);
     }
