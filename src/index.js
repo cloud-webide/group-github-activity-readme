@@ -6,6 +6,7 @@ const { Toolkit } = require("actions-toolkit");
 
 const { commitFile } = require("./utils/commit");
 const { toUrlFormat } = require("./utils/markdown");
+const { formatDate } = require("./constant");
 
 // Get config
 const CUSTOM_CONFIG = core.getInput("CUSTOM_CONFIG");
@@ -33,7 +34,7 @@ const serializers = {
     // core.info(JSON.stringify(item, null, 2));
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
-    )} at ${new Date(item.created_at).toLocaleTimeString()}`;
+    )} at ${formatDate(item.created_at)}`;
   },
   IssuesEvent: (item) => {
     // core.info("IssuesEvent");
@@ -41,9 +42,7 @@ const serializers = {
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
-    )} in ${toUrlFormat(item.repo.name)} at ${new Date(
-      item.created_at
-    ).toLocaleTimeString()}`;
+    )} in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
   },
   PullRequestEvent: (item) => {
     // core.info("PullRequestEvent");
@@ -54,7 +53,7 @@ const serializers = {
       : `${emoji} ${capitalize(item.payload.action)}`;
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
-    )} at ${new Date(item.created_at).toLocaleTimeString()}`;
+    )} at ${formatDate(item.created_at)}`;
   },
   // ReleaseEvent: (item) => {
   //   core.info("ReleaseEvent");
@@ -67,13 +66,15 @@ const serializers = {
 
 Toolkit.run(
   async (tools) => {
-    const users = GH_USERNAMES.split(",");
+    const users = GH_USERNAMES.split(",").map((s) => s.trim());
+    const repos = GH_REPOS.split(",").map((s) => s.trim());
     // 最好的处理方式是矩阵 martrix
     tools.log.debug(`共有 ${users.length} 个用户活动需要监听，分别是 ${users}`);
 
     const getActivitiesByUserName = async (username) => {
       // Get the user's public events
       tools.log.debug(`Getting activity for ${username}`);
+      // 通过这个方式获取的数据，应该只有 90 天以内的。
       const events = await tools.github.activity.listPublicEventsForUser({
         username: username,
         per_page: 1000,
@@ -98,7 +99,7 @@ Toolkit.run(
           updated_at: item.updated_at,
         }))
         // 只保留指定仓库
-        .filter((item) => GH_REPOS.includes(item.repoName))
+        .filter((item) => repos.includes(item.repoName))
         .sort((a, b) => (a.created_at - b.created_at > 0 ? 1 : -1));
 
       const tempMap = {};
@@ -112,7 +113,7 @@ Toolkit.run(
 
       const content = [];
       Object.keys(tempMap).forEach((repoName) => {
-        content.push(`### ${repoName}`);
+        content.push(`${toUrlFormat(repoName)}`);
         content.push(...tempMap[repoName]);
         content.push("");
       });
