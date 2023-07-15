@@ -1,18 +1,14 @@
-name: GitHub - Activity - Readme
-description: Updates README with the recent GitHub activity of a user
+name: Group - GitHub - Activity - Readme
+description: Updates README with the recent GitHub activity of some users in some repos
 author: yiliang114
 
 inputs:
-  CUSTOM_CONFIG: # 输入项名称
-    description: "Your care repos" # 描述
-    default: "{}" # 默认值
-    required: false # 是否是必填项
   GH_REPOS: # 输入项名称
-    description: "Your care repos" # 描述
+    description: "The repos you care about" # 多个 repo 使用 , 分割
     default: ${{ github.event.repository.name }} # 默认值
     required: false # 是否是必填项
   GH_USERNAMES:
-    description: "Your GitHub username"
+    description: "The users you care about" # 多个 user 使用 , 分割
     default: ${{ github.repository_owner }} # group or user
     required: false
   COMMIT_NAME:
@@ -35,6 +31,11 @@ inputs:
     description: "The file location to write changes to"
     default: "README.md"
     required: false
+  CUSTOM_CONFIG: # 输入项名称
+    description: "Your care repos" # 描述
+    default: "{}" # 默认值
+    required: false # 是否是必填项
+
 branding:
   color: yellow
   icon: activity
