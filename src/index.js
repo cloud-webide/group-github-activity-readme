@@ -183,7 +183,6 @@ Toolkit.run(
 
       tools.log.debug(`writeFileSync: ${readmeContent.length}`);
 
-      // TODO:
       // Commit to the remote repository
       try {
         await commitFile(COMMIT_EMAIL, COMMIT_NAME, TARGET_FILE, COMMIT_MSG);
@@ -195,7 +194,7 @@ Toolkit.run(
     }
 
     const oldContent = readmeContent.slice(startIdx + 1, endIdx).join("\n");
-    const newContent = content.map((line, idx) => line).join("\n");
+    const newContent = content.join("\n");
 
     if (oldContent.trim() === newContent.trim()) {
       tools.exit.success("No changes detected");
