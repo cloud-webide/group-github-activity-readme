@@ -2,11 +2,10 @@
 const core = require("@actions/core");
 const fs = require("fs");
 const path = require("path");
-const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
-const _ = require("lodash-es");
 
-const logEnabled = false;
+const { commitFile } = require("./utils/commit");
+const { toUrlFormat } = require("./utils/markdown");
 
 // Get config
 const CUSTOM_CONFIG = core.getInput("CUSTOM_CONFIG");
@@ -19,7 +18,6 @@ const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
 core.info(CUSTOM_CONFIG);
-core.info(GH_REPOS);
 
 /**
  * 首字母大写
@@ -28,72 +26,6 @@ core.info(GH_REPOS);
  * @returns {String}
  */
 const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
-
-/**
- * 返回 markdown 形式的链接
- * Returns a URL in markdown format for PR's and issues
- * @param {Object | String} item - holds information concerning the issue/PR
- *
- * @returns {String}
- */
-const toUrlFormat = (item) => {
-  if (typeof item !== "object") {
-    return `[${item}](https://github.com/${item})`;
-  }
-  if (Object.hasOwnProperty.call(item.payload, "comment")) {
-    return `[#${item.payload.issue.number}](${item.payload.comment.html_url})`;
-  }
-  if (Object.hasOwnProperty.call(item.payload, "issue")) {
-    return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
-  }
-  if (Object.hasOwnProperty.call(item.payload, "pull_request")) {
-    return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
-  }
-
-  if (Object.hasOwnProperty.call(item.payload, "release")) {
-    const release = item.payload.release.name || item.payload.release.tag_name;
-    return `[${release}](${item.payload.release.html_url})`;
-  }
-};
-
-/**
- * Execute shell command
- * @param {String} cmd - root command
- * @param {String[]} args - args to be passed along with
- *
- * @returns {Promise<void>}
- */
-
-const exec = (cmd, args = []) =>
-  new Promise((resolve, reject) => {
-    const app = spawn(cmd, args, { stdio: "pipe" });
-    let stdout = "";
-    app.stdout.on("data", (data) => {
-      stdout = data;
-    });
-    app.on("close", (code) => {
-      if (code !== 0 && !stdout.includes("nothing to commit")) {
-        err = new Error(`Invalid status code: ${code}`);
-        err.code = code;
-        return reject(err);
-      }
-      return resolve(code);
-    });
-    app.on("error", reject);
-  });
-
-/**
- * Make a commit 提交代码
- *
- * @returns {Promise<void>}
- */
-const commitFile = async () => {
-  await exec("git", ["config", "--global", "user.email", COMMIT_EMAIL]);
-  await exec("git", ["config", "--global", "user.name", COMMIT_NAME]);
-  await exec("git", ["add", TARGET_FILE]);
-  await exec("git", ["commit", "-m", COMMIT_MSG]);
-  await exec("git", ["push"]);
-};
 
 const serializers = {
   IssueCommentEvent: (item) => {
@@ -165,6 +97,8 @@ Toolkit.run(
           created_at: item.created_at,
           updated_at: item.updated_at,
         }))
+        // 只保留指定仓库
+        .filter((item) => GH_REPOS.includes(item.repoName))
         .sort((a, b) => (a.created_at - b.created_at > 0 ? 1 : -1));
 
       const tempMap = {};
@@ -173,8 +107,9 @@ Toolkit.run(
         if (!tempMap[repoName]) {
           tempMap[repoName] = [];
         }
-        tempMap[repoName].push(item);
+        tempMap[repoName].push(item.text);
       });
+
       const content = [];
       Object.keys(tempMap).forEach((repoName) => {
         content.push(`### ${repoName}`);
@@ -235,7 +170,7 @@ Toolkit.run(
         // TODO:
         // Commit to the remote repository
         try {
-          await commitFile();
+          await commitFile(COMMIT_EMAIL, COMMIT_NAME, TARGET_FILE, COMMIT_MSG);
         } catch (err) {
           tools.log.debug("Something went wrong");
           return tools.exit.failure(err);
@@ -287,7 +222,7 @@ Toolkit.run(
       // Commit to the remote repository
       // TODO:
       try {
-        await commitFile();
+        await commitFile(COMMIT_EMAIL, COMMIT_NAME, TARGET_FILE, COMMIT_MSG);
       } catch (err) {
         tools.log.debug("Something went wrong");
         return tools.exit.failure(err);

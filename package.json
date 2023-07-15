@@ -9,12 +9,11 @@
   "scripts": {
     "format:check": "prettier --check index.js",
     "format": "prettier --write index.js",
-    "build": "ncc build index.js -o dist"
+    "build": "ncc build src/index.js -o dist"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "actions-toolkit": "^5.0.0",
-    "lodash-es": "^4.17.21"
+    "actions-toolkit": "^5.0.0"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
