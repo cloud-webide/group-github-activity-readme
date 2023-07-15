@@ -5,6 +5,8 @@ const path = require("path");
 const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
+const logEnabled = false;
+
 // Get config
 const CUSTOM_CONFIG = core.getInput("CUSTOM_CONFIG");
 const GH_REPOS = core.getInput("GH_REPOS");
@@ -95,8 +97,8 @@ const commitFile = async () => {
 
 const serializers = {
   IssueCommentEvent: (item) => {
-    core.info("IssueCommentEvent");
-    core.info(JSON.stringify(item, null, 2));
+    // core.info("IssueCommentEvent");
+    // core.info(JSON.stringify(item, null, 2));
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
     )}`;
@@ -256,12 +258,12 @@ Toolkit.run(
       core.info(readmeContent.join("\n"));
       // Commit to the remote repository
       // TODO:
-      // try {
-      //   await commitFile();
-      // } catch (err) {
-      //   tools.log.debug("Something went wrong");
-      //   return tools.exit.failure(err);
-      // }
+      try {
+        await commitFile();
+      } catch (err) {
+        tools.log.debug("Something went wrong");
+        return tools.exit.failure(err);
+      }
       tools.exit.success("Pushed to remote repository");
     };
 
