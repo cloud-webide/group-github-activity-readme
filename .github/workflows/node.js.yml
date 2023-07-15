@@ -38,7 +38,7 @@ jobs:
   loadEnv:
     runs-on: ubuntu-latest
     outputs:
-      CONFIG: ${{ steps.getConfig.outputs }}
+      CONFIG: ${{ steps.getConfig.outputs.CONFIG }}
       # repos: ${{ steps.getRepos.outputs }}
     steps:
       - id: getConfig
