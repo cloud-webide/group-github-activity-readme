@@ -214,7 +214,7 @@ Toolkit.run(
     }
 
     content.forEach((line, idx) => {
-      readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
+      readmeContent.splice(startIdx + idx, 0, line);
     });
     tools.log.success(`Wrote to ${TARGET_FILE}`);
 
