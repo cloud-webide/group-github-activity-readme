@@ -1,7 +1,5 @@
 {
-  "users": [
-    "yiliang114"
-  ],
+  "users": ["yiliang114"],
   "repos": [
     "microsoft/vscode",
     "microsoft/vscode-test-web",
