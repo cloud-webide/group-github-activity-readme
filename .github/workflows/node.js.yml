@@ -46,7 +46,8 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAMES: "yiliang114"
           GH_REPOS: "microsoft/vscode"
