@@ -129,7 +129,7 @@ Toolkit.run(
       }
 
       tools.log.debug(`${username}'s activity length is ${rowContent.length}`);
-      fs.writeFileSync(`./${username}-${TARGET_FILE}`, rowContent.join("\n"));
+      fs.writeFileSync(`./${username}-${TARGET_FILE}`, content.join("\n"));
       return content;
     };
 
@@ -208,7 +208,7 @@ Toolkit.run(
     if (!readmeActivitySection.length) {
       content.some((line, idx) => {
         // User doesn't have 5 public events
-        if (!line) {
+        if (!line && idx === readmeActivitySection.length - 1) {
           return true;
         }
         readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
@@ -220,12 +220,13 @@ Toolkit.run(
 
       readmeActivitySection.some((line, idx) => {
         // User doesn't have 5 public events
-        if (!content[count]) {
+        if (!content[count] && idx === readmeActivitySection.length - 1) {
           return true;
         }
         if (line !== "") {
           readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
           count++;
+          core.info(count);
         }
       });
       tools.log.success(`Updated ${TARGET_FILE} with the recent activity`);
