@@ -111,8 +111,9 @@ Toolkit.run(
         tempMap[repoName].push(item.text);
       });
 
-      const content = [`${username}'s activity in ${toUrlFormat(repoName)}: `];
+      const content = [`${username}'s activity: `];
       Object.keys(tempMap).forEach((repoName) => {
+        content.push(toUrlFormat(repoName));
         content.push(...tempMap[repoName]);
         content.push("");
       });
