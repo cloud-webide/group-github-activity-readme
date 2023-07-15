@@ -16,6 +16,7 @@ const exec = (cmd, args = []) =>
     });
     app.on("close", (code) => {
       if (code !== 0 && !stdout.includes("nothing to commit")) {
+        console.log("stdout", stdout);
         err = new Error(`Invalid status code: ${code}`);
         err.code = code;
         return reject(err);
@@ -41,7 +42,7 @@ const commitFile = async (
   // await exec("git", ["add", TARGET_FILE]);
   await exec("git", ["add", "."]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  // await exec("git", ["push"]);
+  await exec("git", ["push"]);
 };
 
 module.exports = {
