@@ -32,9 +32,9 @@ const serializers = {
   IssueCommentEvent: (item) => {
     // core.info("IssueCommentEvent");
     // core.info(JSON.stringify(item, null, 2));
-    return `🗣 Commented on ${toUrlFormat(item)} at ${formatDate(
-      item.created_at
-    )}`;
+    return `🗣 Commented on ${toUrlFormat(item)}  in ${toUrlFormat(
+      item.repo.name
+    )} at ${formatDate(item.created_at)}`;
   },
   IssuesEvent: (item) => {
     // core.info("IssuesEvent");
@@ -42,7 +42,7 @@ const serializers = {
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
-    )} at ${formatDate(item.created_at)}`;
+    )}  in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
   },
   PullRequestEvent: (item) => {
     // core.info("PullRequestEvent");
@@ -51,15 +51,17 @@ const serializers = {
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
-    return `${line} PR ${toUrlFormat(item)} at ${formatDate(item.created_at)}`;
+    return `${line} PR ${toUrlFormat(item)}  in ${toUrlFormat(
+      item.repo.name
+    )} at ${formatDate(item.created_at)}`;
   },
-  // ReleaseEvent: (item) => {
-  //   core.info("ReleaseEvent");
-  //   core.info(JSON.stringify(item, null, 2));
-  //   return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
-  //     item
-  //   )} in ${toUrlFormat(item.repo.name)}`;
-  // },
+  ReleaseEvent: (item) => {
+    // core.info("ReleaseEvent");
+    // core.info(JSON.stringify(item, null, 2));
+    return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
+      item
+    )} in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
+  },
 };
 
 Toolkit.run(
@@ -106,23 +108,32 @@ Toolkit.run(
         if (!tempMap[repoName]) {
           tempMap[repoName] = [];
         }
-        tempMap[repoName].push(`  1. ${item.text}`);
+        tempMap[repoName].push(item.text);
       });
 
-      const content = [username];
+      const content = [`${username}'s activity in ${toUrlFormat(repoName)}: `];
       Object.keys(tempMap).forEach((repoName) => {
-        content.push(`1. ${toUrlFormat(repoName)}`);
         content.push(...tempMap[repoName]);
         content.push("");
       });
 
-      core.info(content);
+      if (!rowContent.length) {
+        tools.exit.success(
+          "No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity"
+        );
+      }
+
+      if (rowContent.length < 5) {
+        tools.log.info("Found less than 5 activities");
+      }
+
       return content;
     };
 
     const content = (
       await Promise.all(users.map(getActivitiesByUserName))
-    ).flat();
+    ).flat(Infinity);
+    core.info(content);
 
     const readmeContent = fs
       .readFileSync(`./${TARGET_FILE}`, "utf-8")
@@ -145,21 +156,12 @@ Toolkit.run(
       (content) => content.trim() === "<!--END_SECTION:activity-->"
     );
 
-    if (!content.length) {
-      tools.exit.success(
-        "No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity"
-      );
-    }
-
-    if (content.length < 5) {
-      tools.log.info("Found less than 5 activities");
-    }
-
     if (startIdx !== -1 && endIdx === -1) {
       // Add one since the content needs to be inserted just after the initial comment
       startIdx++;
       content.forEach(
-        (line, idx) => readmeContent.splice(startIdx + idx, 0, line) // 格式在前面处理
+        (line, idx) =>
+          readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`) // 格式在前面处理
       );
 
       // Append <!--END_SECTION:activity--> comment
@@ -187,7 +189,7 @@ Toolkit.run(
 
     const oldContent = readmeContent.slice(startIdx + 1, endIdx).join("\n");
     const newContent = content
-      .map((line, idx) => line) // 格式在前面处理
+      .map((line, idx) => `${idx + 1}. ${line}`)
       .join("\n");
 
     if (oldContent.trim() === newContent.trim())
@@ -228,7 +230,6 @@ Toolkit.run(
     // core.info(readmeContent.join("\n"));
 
     // Commit to the remote repository
-    // TODO:
     try {
       await commitFile(COMMIT_EMAIL, COMMIT_NAME, TARGET_FILE, COMMIT_MSG);
     } catch (err) {
