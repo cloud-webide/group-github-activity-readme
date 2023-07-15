@@ -128,13 +128,15 @@ Toolkit.run(
         tools.log.info("Found less than 5 activities");
       }
 
+      core.info(`${username}'s activity length is ${rowContent.length}`);
       return content;
     };
 
     const content = (
       await Promise.all(users.map(getActivitiesByUserName))
     ).flat(Infinity);
-    core.info(content);
+
+    core.info(`all activity length is ${content.length}`);
 
     const readmeContent = fs
       .readFileSync(`./${TARGET_FILE}`, "utf-8")
