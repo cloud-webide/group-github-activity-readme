@@ -135,13 +135,13 @@ Toolkit.run(
 
     const getActivitiesByUserName = async (username) => {
       // Get the user's public events
-      tools.log.debug(`Getting activity for ${GH_USERNAMES}`);
+      tools.log.debug(`Getting activity for ${username}`);
       const events = await tools.github.activity.listPublicEventsForUser({
-        username: GH_USERNAMES,
-        per_page: 100,
+        username: username,
+        per_page: 1000,
       });
       tools.log.debug(
-        `Activity for ${GH_USERNAMES}, ${events.data.length} events found.`
+        `Activity for ${username}, ${events.data.length} events found.`
       );
 
       const content = events.data
@@ -204,13 +204,13 @@ Toolkit.run(
 
         // TODO:
         // Commit to the remote repository
-        // try {
-        //   await commitFile();
-        // } catch (err) {
-        //   tools.log.debug("Something went wrong");
-        //   return tools.exit.failure(err);
-        // }
-        // tools.exit.success("Wrote to README");
+        try {
+          await commitFile();
+        } catch (err) {
+          tools.log.debug("Something went wrong");
+          return tools.exit.failure(err);
+        }
+        tools.exit.success("Wrote to README");
       }
 
       const oldContent = readmeContent.slice(startIdx + 1, endIdx).join("\n");
