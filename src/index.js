@@ -1,7 +1,6 @@
 // @actions/core actions 的核心库, 会被默认包含
 const core = require("@actions/core");
 const fs = require("fs");
-const path = require("path");
 const { Toolkit } = require("actions-toolkit");
 
 const { commitFile } = require("./utils/commit");
@@ -68,7 +67,7 @@ Toolkit.run(
   async (tools) => {
     const users = GH_USERNAMES.split(",").map((s) => s.trim());
     const repos = GH_REPOS.split(",").map((s) => s.trim());
-    // 最好的处理方式是矩阵 martrix
+    // TODO: 最好的处理方式是矩阵 martrix
     tools.log.debug(`共有 ${users.length} 个用户活动需要监听，分别是 ${users}`);
 
     const getActivitiesByUserName = async (username) => {
@@ -92,16 +91,27 @@ Toolkit.run(
         // Call the serializer to construct a string
         .map((item) => ({
           text: serializers[item.type](item),
-          repo: item.repo,
           repoName: item.repo.name,
-          actor: item.actor,
           created_at: item.created_at,
-          updated_at: item.updated_at,
+          // repo: item.repo,
+          // actor: item.actor,
+          // updated_at: item.updated_at,
         }))
         // 只保留指定仓库
         .filter((item) => repos.includes(item.repoName))
         .sort((a, b) => (a.created_at - b.created_at > 0 ? -1 : 1));
 
+      if (!rowContent.length) {
+        tools.exit.success(
+          "No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity"
+        );
+      }
+
+      if (rowContent.length < 5) {
+        tools.log.info("Found less than 5 activities");
+      }
+
+      // 提取出同一个 project 的活动
       const tempMap = {};
       rowContent.forEach((item) => {
         const { repoName } = item;
@@ -119,16 +129,6 @@ Toolkit.run(
         );
         content.push("");
       });
-
-      if (!rowContent.length) {
-        tools.exit.success(
-          "No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity"
-        );
-      }
-
-      if (rowContent.length < 5) {
-        tools.log.info("Found less than 5 activities");
-      }
 
       tools.log.debug(`${username}'s activity length is ${rowContent.length}`);
       // fs.writeFileSync(`./${username}-${TARGET_FILE}`, content.join("\n"));

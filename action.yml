@@ -25,7 +25,7 @@ inputs:
     required: false
   MAX_LINES:
     description: "The maximum number of lines populated in your readme file"
-    default: "1000"
+    default: "100"
     required: false
   TARGET_FILE:
     description: "The file location to write changes to"
