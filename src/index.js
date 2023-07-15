@@ -18,7 +18,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
-core.info(CUSTOM_CONFIG);
+tools.log.debug(CUSTOM_CONFIG);
 
 /**
  * 首字母大写
@@ -30,23 +30,23 @@ const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
 
 const serializers = {
   // IssueCommentEvent: (item) => {
-  //   // core.info("IssueCommentEvent");
-  //   // core.info(JSON.stringify(item, null, 2));
+  //   // tools.log.debug("IssueCommentEvent");
+  //   // tools.log.debug(JSON.stringify(item, null, 2));
   //   return `🗣 Commented on ${toUrlFormat(item)}  in ${toUrlFormat(
   //     item.repo.name
   //   )} at ${formatDate(item.created_at)}`;
   // },
   IssuesEvent: (item) => {
-    // core.info("IssuesEvent");
-    // core.info(JSON.stringify(item, null, 2));
+    // tools.log.debug("IssuesEvent");
+    // tools.log.debug(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
     )}  in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
   },
   PullRequestEvent: (item) => {
-    // core.info("PullRequestEvent");
-    // core.info(JSON.stringify(item, null, 2));
+    // tools.log.debug("PullRequestEvent");
+    // tools.log.debug(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "💪" : "❌";
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
@@ -56,8 +56,8 @@ const serializers = {
     )} at ${formatDate(item.created_at)}`;
   },
   // ReleaseEvent: (item) => {
-  //   // core.info("ReleaseEvent");
-  //   // core.info(JSON.stringify(item, null, 2));
+  //   // tools.log.debug("ReleaseEvent");
+  //   // tools.log.debug(JSON.stringify(item, null, 2));
   //   return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
   //     item
   //   )} in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
@@ -128,7 +128,7 @@ Toolkit.run(
         tools.log.info("Found less than 5 activities");
       }
 
-      core.info(`${username}'s activity length is ${rowContent.length}`);
+      tools.log.debug(`${username}'s activity length is ${rowContent.length}`);
       return content;
     };
 
@@ -136,7 +136,7 @@ Toolkit.run(
       await Promise.all(users.map(getActivitiesByUserName))
     ).flat(Infinity);
 
-    core.info(`all activity length is ${content.length}`);
+    tools.log.debug(`all activity length is ${content.length}`);
 
     const readmeContent = fs
       .readFileSync(`./${TARGET_FILE}`, "utf-8")
@@ -159,6 +159,8 @@ Toolkit.run(
       (content) => content.trim() === "<!--END_SECTION:activity-->"
     );
 
+    tools.log.debug(`startIdx: ${startIdx}, endIdx: ${endIdx}`);
+
     if (startIdx !== -1 && endIdx === -1) {
       // Add one since the content needs to be inserted just after the initial comment
       startIdx++;
@@ -177,7 +179,7 @@ Toolkit.run(
       // Update README
       fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
 
-      // core.info(readmeContent.join("\n"));
+      tools.log.debug(`writeFileSync: ${readmeContent.length}`);
 
       // TODO:
       // Commit to the remote repository
@@ -230,7 +232,7 @@ Toolkit.run(
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
-    // core.info(readmeContent.join("\n"));
+    tools.log.debug(`writeFileSync: ${readmeContent.length}`);
 
     // Commit to the remote repository
     try {
