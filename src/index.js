@@ -156,7 +156,7 @@ Toolkit.run(
     }
 
     // Find the index corresponding to <!--END_SECTION:activity--> comment
-    const endIdx = readmeContent.findIndex(
+    let endIdx = readmeContent.findIndex(
       (content) => content.trim() === "<!--END_SECTION:activity-->"
     );
 
@@ -198,27 +198,26 @@ Toolkit.run(
       .map((line, idx) => `${idx + 1}. ${line}`)
       .join("\n");
 
-    if (oldContent.trim() === newContent.trim())
+    if (oldContent.trim() === newContent.trim()) {
       tools.exit.success("No changes detected");
+    }
 
     startIdx++;
 
     // Recent GitHub Activity content between the comments
     const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
-    if (!readmeActivitySection.length) {
-      content.forEach((line, idx) => {
-        readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
-      });
-      tools.log.success(`Wrote to ${TARGET_FILE}`);
-    } else {
-      // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
-      let count = 0;
-
-      readmeActivitySection.forEach((line, idx) => {
-        readmeContent[startIdx + idx] = `${count++ + 1}. ${content[count]}`;
-      });
-      tools.log.success(`Updated ${TARGET_FILE} with the recent activity`);
+    if (readmeActivitySection.length) {
+      // 清除旧数据
+      readmeContent.splice(startIdx, startIdx + readmeActivitySection.length);
+      endIdx = readmeContent.findIndex(
+        (content) => content.trim() === "<!--END_SECTION:activity-->"
+      );
     }
+
+    content.forEach((line, idx) => {
+      readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
+    });
+    tools.log.success(`Wrote to ${TARGET_FILE}`);
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
