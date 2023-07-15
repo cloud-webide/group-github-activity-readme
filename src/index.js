@@ -29,13 +29,13 @@ core.info(CUSTOM_CONFIG);
 const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
 
 const serializers = {
-  IssueCommentEvent: (item) => {
-    // core.info("IssueCommentEvent");
-    // core.info(JSON.stringify(item, null, 2));
-    return `🗣 Commented on ${toUrlFormat(item)}  in ${toUrlFormat(
-      item.repo.name
-    )} at ${formatDate(item.created_at)}`;
-  },
+  // IssueCommentEvent: (item) => {
+  //   // core.info("IssueCommentEvent");
+  //   // core.info(JSON.stringify(item, null, 2));
+  //   return `🗣 Commented on ${toUrlFormat(item)}  in ${toUrlFormat(
+  //     item.repo.name
+  //   )} at ${formatDate(item.created_at)}`;
+  // },
   IssuesEvent: (item) => {
     // core.info("IssuesEvent");
     // core.info(JSON.stringify(item, null, 2));
@@ -55,13 +55,13 @@ const serializers = {
       item.repo.name
     )} at ${formatDate(item.created_at)}`;
   },
-  ReleaseEvent: (item) => {
-    // core.info("ReleaseEvent");
-    // core.info(JSON.stringify(item, null, 2));
-    return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
-      item
-    )} in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
-  },
+  // ReleaseEvent: (item) => {
+  //   // core.info("ReleaseEvent");
+  //   // core.info(JSON.stringify(item, null, 2));
+  //   return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
+  //     item
+  //   )} in ${toUrlFormat(item.repo.name)} at ${formatDate(item.created_at)}`;
+  // },
 };
 
 Toolkit.run(
