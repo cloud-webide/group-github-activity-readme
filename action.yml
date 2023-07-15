@@ -9,7 +9,7 @@ inputs:
     required: false # 是否是必填项
   GH_USERNAMES:
     description: "Your GitHub username"
-    default: ${{ github.repository_owner }}
+    default: ${{ github.repository_owner }} # group or user
     required: false
   COMMIT_NAME:
     description: "Name of the committer"
