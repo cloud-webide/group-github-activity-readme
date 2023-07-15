@@ -38,11 +38,11 @@ jobs:
   loadEnv:
     runs-on: ubuntu-latest
     outputs:
-      config: ${{ steps.getConfig.outputs }}
+      CONFIG: ${{ steps.getConfig.outputs }}
       # repos: ${{ steps.getRepos.outputs }}
     steps:
       - id: getConfig
-        run: echo $(cat ./config.json) >> "$GITHUB_OUTPUT"
+        run: echo CONFIG=$(cat ./config.json) >> "$GITHUB_OUTPUT"
       # - id: getUsers
       #   # 读取 config.json 文件，将其中的 users 字段作为输出
       #   run: echo $(cat ./config.json) | grep -o '"users":"[^"]*' | grep -o '[^"]*$'
@@ -62,13 +62,13 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
       - env:
-          config: ${{needs.loadEnv.outputs.config}}
+          CONFIG: ${{needs.loadEnv.outputs.CONFIG}}
           # repos: ${{needs.loadEnv.outputs.repos}}
-        run: echo "$config"
+        run: echo "$CONFIG"
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           GH_USERNAMES: "yiliang114"
           GH_REPOS: "microsoft/vscode"
-          CONFIG: ${{needs.loadEnv.outputs.config}}
+          CONFIG: ${{needs.loadEnv.outputs.CONFIG}}
