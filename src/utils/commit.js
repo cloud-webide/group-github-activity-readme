@@ -11,8 +11,13 @@ const exec = (cmd, args = []) =>
   new Promise((resolve, reject) => {
     const app = spawn(cmd, args, { stdio: "pipe" });
     let stdout = "";
+    let stderr = "";
     app.stdout.on("data", (data) => {
       stdout = data;
+    });
+    app.stderr.on("error", (data) => {
+      stderr = data;
+      console.log("stderr", stderr);
     });
     app.on("close", (code) => {
       if (code !== 0 && !stdout.includes("nothing to commit")) {
