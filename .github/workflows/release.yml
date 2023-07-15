@@ -50,20 +50,27 @@ jobs:
           name: group-github-activity-readme # name：需要下载的 artifact 的名称
       - name: Display structure of downloaded files
         run: ls -R
-      # 使用 tyankatsu0105/read-package-version-actions@v1 工具来读取对应的package.json 数据
-      - name: Read package.json
-        uses: tyankatsu0105/read-package-version-actions@v1
+      - name: Generate Auto Changelog
+        uses: ahmadawais/action-auto-changelog@master
         with:
-          path: "./"
-        id: package-version
-      - name: Create Release for Tag
-        id: release_tag
-        uses: actions/create-release@v1
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }} # 这块需要用到 github的token，因为需要对分之进行代码推送
-        with:
-          tag_name: v${{ steps.package-version.outputs.version }}
-          release_name: Release v${{ steps.package-version.outputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 使用 tyankatsu0105/read-package-version-actions@v1 工具来读取对应的package.json 数据
+      # - name: Read package.json
+      #   uses: tyankatsu0105/read-package-version-actions@v1
+      #   with:
+      #     path: "./"
+      #   id: package-version
+      # - name: Create Release for Tag
+      #   id: release_tag
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }} # 这块需要用到 github的token，因为需要对分之进行代码推送
+      #   with:
+      #     tag_name: v${{ steps.package-version.outputs.version }}
+      #     release_name: Release v${{ steps.package-version.outputs.version }}
       # - uses: GoogleCloudPlatform/release-please-action@v3
       #   id: release
       #   with:
