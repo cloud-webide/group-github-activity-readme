@@ -14,7 +14,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
-core.info("GH_REPOS", GH_REPOS);
+core.info(GH_REPOS);
 
 /**
  * 首字母大写
@@ -93,20 +93,23 @@ const commitFile = async () => {
 
 const serializers = {
   IssueCommentEvent: (item) => {
-    core.info("IssueCommentEvent", item);
+    core.info("IssueCommentEvent");
+    core.info(item);
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
     )}`;
   },
   IssuesEvent: (item) => {
-    core.info("IssuesEvent", item);
+    core.info("IssuesEvent");
+    core.info(item);
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
     )} in ${toUrlFormat(item.repo.name)}`;
   },
   PullRequestEvent: (item) => {
-    core.info("PullRequestEvent", item);
+    core.info("PullRequestEvent");
+    core.info(item);
     const emoji = item.payload.action === "opened" ? "💪" : "❌";
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
@@ -114,7 +117,8 @@ const serializers = {
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
   ReleaseEvent: (item) => {
-    core.info("ReleaseEvent", item);
+    core.info("ReleaseEvent");
+    core.info(item);
     return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
       item
     )} in ${toUrlFormat(item.repo.name)}`;
@@ -193,6 +197,8 @@ Toolkit.run(
 
         // Update README
         fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
+
+        core.info(readmeContent.join("\n"));
 
         // TODO:
         // Commit to the remote repository

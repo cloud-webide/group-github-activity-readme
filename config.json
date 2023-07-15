@@ -1,0 +1,10 @@
+{
+  "users": [
+    "yiliang114"
+  ],
+  "repos": [
+    "microsoft/vscode",
+    "microsoft/vscode-test-web",
+    "microsoft/vscode-l10n"
+  ]
+}
