@@ -6,12 +6,15 @@ const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
 // Get config
-const GH_USERNAME = core.getInput("GH_USERNAME");
+const GH_REPOS = core.getInput("GH_REPOS");
+const GH_USERNAMES = core.getInput("GH_USERNAMES");
 const COMMIT_NAME = core.getInput("COMMIT_NAME");
 const COMMIT_EMAIL = core.getInput("COMMIT_EMAIL");
 const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
+
+core.info("GH_REPOS", GH_REPOS);
 
 /**
  * 首字母大写
@@ -117,13 +120,13 @@ const serializers = {
 Toolkit.run(
   async (tools) => {
     // Get the user's public events
-    tools.log.debug(`Getting activity for ${GH_USERNAME}`);
+    tools.log.debug(`Getting activity for ${GH_USERNAMES}`);
     const events = await tools.github.activity.listPublicEventsForUser({
-      username: GH_USERNAME,
+      username: GH_USERNAMES,
       per_page: 100,
     });
     tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
+      `Activity for ${GH_USERNAMES}, ${events.data.length} events found.`
     );
 
     const content = events.data

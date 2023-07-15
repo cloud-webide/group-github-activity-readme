@@ -27,7 +27,7 @@ jobs:
         run: pnpm run format:check
       - name: Build
         run: pnpm run build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
           path: |
@@ -40,9 +40,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: group-github-activity-readme # name：需要下载的 artifact 的名称
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPOS: "microsoft/vscode"

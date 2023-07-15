@@ -3,11 +3,11 @@ description: Updates README with the recent GitHub activity of a user
 author: yiliang114
 
 inputs:
-  GH_GROUP_NAME: # 输入项名称
-    description: "Your Group name" # 描述
-    default: ${{ github.repository_owner }} # 默认值
+  GH_REPOS: # 输入项名称
+    description: "Your care repos" # 描述
+    default: ${{ github.event.repository.name }} # 默认值
     required: false # 是否是必填项
-  GH_USERNAME:
+  GH_USERNAMES:
     description: "Your GitHub username"
     default: ${{ github.repository_owner }}
     required: false
