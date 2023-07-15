@@ -18,7 +18,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
-tools.log.debug(CUSTOM_CONFIG);
+core.info(CUSTOM_CONFIG);
 
 /**
  * 首字母大写
