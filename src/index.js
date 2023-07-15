@@ -116,6 +116,7 @@ Toolkit.run(
         content.push("");
       });
 
+      core.info(content);
       return content;
     };
 
@@ -171,7 +172,7 @@ Toolkit.run(
       // Update README
       fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
 
-      core.info(readmeContent.join("\n"));
+      // core.info(readmeContent.join("\n"));
 
       // TODO:
       // Commit to the remote repository
@@ -224,7 +225,7 @@ Toolkit.run(
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
-    core.info(readmeContent.join("\n"));
+    // core.info(readmeContent.join("\n"));
 
     // Commit to the remote repository
     // TODO:
