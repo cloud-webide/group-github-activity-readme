@@ -34,35 +34,22 @@ jobs:
             .
             !.git
             !./node_modules
-  job1:
-    runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
-      output2: ${{ steps.step2.outputs.test }}
-    steps:
-      - id: step1
-        run: echo "test=hello" >> "$GITHUB_OUTPUT"
-      - id: step2
-        run: echo "test=world" >> "$GITHUB_OUTPUT"
-  job2:
-    runs-on: ubuntu-latest
-    needs: job1
-    steps:
-      - env:
-          OUTPUT1: ${{needs.job1.outputs.output1}}
-          OUTPUT2: ${{needs.job1.outputs.output2}}
-        run: echo "$OUTPUT1 $OUTPUT2"
+
   loadEnv:
     runs-on: ubuntu-latest
     outputs:
-      users: ${{ steps.getUsers.outputs }}
-      repos: ${{ steps.getRepos.outputs }}
+      config: ${{ steps.getConfig.outputs }}
+      # repos: ${{ steps.getRepos.outputs }}
     steps:
-      - id: getUsers
-        run: echo ./config.json | grep -o '"users":"[^"]*' | grep -o '[^"]*$' >> "$GITHUB_OUTPUT"
-      - id: getRepos
-        run: echo ./config.json | grep -o '"repos":"[^"]*' | grep -o '[^"]*$' >> "$GITHUB_OUTPUT"
+      - id: getConfig
+        run: echo $(cat ./config.json) >> "$GITHUB_OUTPUT"
+      # - id: getUsers
+      #   # 读取 config.json 文件，将其中的 users 字段作为输出
+      #   run: echo $(cat ./config.json) | grep -o '"users":"[^"]*' | grep -o '[^"]*$'
+      # run: echo ./config.json | grep -o '"users":"[^"]*' | grep -o '[^"]*$' >> "$GITHUB_OUTPUT"
+      # - id: getRepos
+      #   run: echo ./config.json | grep -o '"repos":"[^"]*' | grep -o '[^"]*$' >> "$GITHUB_OUTPUT"
+
   test:
     needs: [build, loadEnv]
     name: test dist/index.js
@@ -75,12 +62,13 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
       - env:
-          users: ${{needs.loadEnv.outputs.users}}
-          repos: ${{needs.loadEnv.outputs.repos}}
-        run: echo "$users $repos"
+          config: ${{needs.loadEnv.outputs.config}}
+          # repos: ${{needs.loadEnv.outputs.repos}}
+        run: echo "$config"
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           GH_USERNAMES: "yiliang114"
           GH_REPOS: "microsoft/vscode"
+          CONFIG: ${{needs.loadEnv.outputs.config}}

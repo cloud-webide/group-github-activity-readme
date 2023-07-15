@@ -3,6 +3,10 @@ description: Updates README with the recent GitHub activity of a user
 author: yiliang114
 
 inputs:
+  CONFIG: # 输入项名称
+    description: "Your care repos" # 描述
+    default: "{}" # 默认值
+    required: false # 是否是必填项
   GH_REPOS: # 输入项名称
     description: "Your care repos" # 描述
     default: ${{ github.event.repository.name }} # 默认值
@@ -25,7 +29,7 @@ inputs:
     required: false
   MAX_LINES:
     description: "The maximum number of lines populated in your readme file"
-    default: 10
+    default: "10"
     required: false
   TARGET_FILE:
     description: "The file location to write changes to"

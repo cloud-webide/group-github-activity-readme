@@ -6,6 +6,7 @@ const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
 // Get config
+const CONFIG = core.getInput("CONFIG");
 const GH_REPOS = core.getInput("GH_REPOS");
 const GH_USERNAMES = core.getInput("GH_USERNAMES");
 const COMMIT_NAME = core.getInput("COMMIT_NAME");
@@ -14,6 +15,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
+core.info(CONFIG);
 core.info(GH_REPOS);
 
 /**
