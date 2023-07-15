@@ -11,17 +11,11 @@ const exec = (cmd, args = []) =>
   new Promise((resolve, reject) => {
     const app = spawn(cmd, args, { stdio: "pipe" });
     let stdout = "";
-    let stderr = "";
     app.stdout.on("data", (data) => {
-      stdout = data;
-    });
-    app.stderr.on("error", (data) => {
-      stderr = data;
-      console.log("stderr", stderr);
+      stdout = data.toString();
     });
     app.on("close", (code) => {
-      if (code !== 0 && !stdout.includes("nothing to commit")) {
-        console.log("stdout", stdout);
+      if (code !== 0 && !stdout.includes("no changes added to commit")) {
         err = new Error(`Invalid status code: ${code}`);
         err.code = code;
         return reject(err);
@@ -44,10 +38,14 @@ const commitFile = async (
 ) => {
   await exec("git", ["config", "--global", "user.email", COMMIT_EMAIL]);
   await exec("git", ["config", "--global", "user.name", COMMIT_NAME]);
-  // await exec("git", ["add", TARGET_FILE]);
-  await exec("git", ["add", "."]);
+  await exec("git", ["add", TARGET_FILE]);
+  // await exec("git", ["add", "."]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  await exec("git", ["push"]);
+  try {
+    await exec("git", ["push"]);
+  } catch (error) {
+    console.error(`git push error: ${error}`);
+  }
 };
 
 module.exports = {
