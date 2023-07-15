@@ -7,8 +7,8 @@
   "author": "yiliang114",
   "license": "MIT",
   "scripts": {
-    "format:check": "prettier --check index.js",
-    "format": "prettier --write index.js",
+    "format:check": "prettier --check src",
+    "format": "prettier --write src",
     "build": "ncc build src/index.js -o dist"
   },
   "dependencies": {
