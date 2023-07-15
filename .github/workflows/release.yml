@@ -35,7 +35,7 @@ jobs:
         with:
           name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
           path: |
-            .
+            ./dist
             !.git
             !./node_modules
 
@@ -48,6 +48,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: group-github-activity-readme # name：需要下载的 artifact 的名称
+          path: ./dist
       - name: Display structure of downloaded files
         run: ls -R
       - name: Generate Auto Changelog
