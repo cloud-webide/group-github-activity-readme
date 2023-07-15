@@ -111,10 +111,12 @@ Toolkit.run(
         tempMap[repoName].push(item.text);
       });
 
-      const content = [`${username}'s activity: `];
+      const content = [`## ${username}'s activity: `];
       Object.keys(tempMap).forEach((repoName) => {
-        content.push(toUrlFormat(repoName));
-        content.push(...tempMap[repoName]);
+        content.push(`### ${toUrlFormat(repoName)}`);
+        content.push(
+          ...tempMap[repoName].map((text, idx) => `${idx + 1}. ${text}`)
+        );
         content.push("");
       });
 
@@ -166,8 +168,7 @@ Toolkit.run(
       // Add one since the content needs to be inserted just after the initial comment
       startIdx++;
       content.forEach(
-        (line, idx) =>
-          readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`) // 格式在前面处理
+        (line, idx) => readmeContent.splice(startIdx + idx, 0, line) // 格式在前面处理
       );
 
       // Append <!--END_SECTION:activity--> comment
@@ -194,9 +195,7 @@ Toolkit.run(
     }
 
     const oldContent = readmeContent.slice(startIdx + 1, endIdx).join("\n");
-    const newContent = content
-      .map((line, idx) => `${idx + 1}. ${line}`)
-      .join("\n");
+    const newContent = content.map((line, idx) => line).join("\n");
 
     if (oldContent.trim() === newContent.trim()) {
       tools.exit.success("No changes detected");
