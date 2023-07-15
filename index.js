@@ -104,16 +104,16 @@ const serializers = {
     )}`;
   },
   IssuesEvent: (item) => {
-    core.info("IssuesEvent");
-    core.info(JSON.stringify(item, null, 2));
+    // core.info("IssuesEvent");
+    // core.info(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
     )} in ${toUrlFormat(item.repo.name)}`;
   },
   PullRequestEvent: (item) => {
-    core.info("PullRequestEvent");
-    core.info(JSON.stringify(item, null, 2));
+    // core.info("PullRequestEvent");
+    // core.info(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "💪" : "❌";
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
