@@ -6,7 +6,7 @@ const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
 // Get config
-const CONFIG = core.getInput("CONFIG");
+const CUSTOM_CONFIG = core.getInput("CUSTOM_CONFIG");
 const GH_REPOS = core.getInput("GH_REPOS");
 const GH_USERNAMES = core.getInput("GH_USERNAMES");
 const COMMIT_NAME = core.getInput("COMMIT_NAME");
@@ -15,7 +15,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
 const TARGET_FILE = core.getInput("TARGET_FILE");
 
-core.info(CONFIG);
+core.info(CUSTOM_CONFIG);
 core.info(GH_REPOS);
 
 /**
@@ -96,14 +96,14 @@ const commitFile = async () => {
 const serializers = {
   IssueCommentEvent: (item) => {
     core.info("IssueCommentEvent");
-    core.info(item);
+    core.info(JSON.stringify(item, null, 2));
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
     )}`;
   },
   IssuesEvent: (item) => {
     core.info("IssuesEvent");
-    core.info(item);
+    core.info(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "❗" : "🔒";
     return `${emoji} ${capitalize(item.payload.action)} issue ${toUrlFormat(
       item
@@ -111,20 +111,20 @@ const serializers = {
   },
   PullRequestEvent: (item) => {
     core.info("PullRequestEvent");
-    core.info(item);
+    core.info(JSON.stringify(item, null, 2));
     const emoji = item.payload.action === "opened" ? "💪" : "❌";
     const line = item.payload.pull_request.merged
       ? "🎉 Merged"
       : `${emoji} ${capitalize(item.payload.action)}`;
     return `${line} PR ${toUrlFormat(item)} in ${toUrlFormat(item.repo.name)}`;
   },
-  ReleaseEvent: (item) => {
-    core.info("ReleaseEvent");
-    core.info(item);
-    return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
-      item
-    )} in ${toUrlFormat(item.repo.name)}`;
-  },
+  // ReleaseEvent: (item) => {
+  //   core.info("ReleaseEvent");
+  //   core.info(JSON.stringify(item, null, 2));
+  //   return `🚀 ${capitalize(item.payload.action)} release ${toUrlFormat(
+  //     item
+  //   )} in ${toUrlFormat(item.repo.name)}`;
+  // },
 };
 
 Toolkit.run(
@@ -253,14 +253,15 @@ Toolkit.run(
 
       // Update README
       fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
-
+      core.info(readmeContent.join("\n"));
       // Commit to the remote repository
-      try {
-        await commitFile();
-      } catch (err) {
-        tools.log.debug("Something went wrong");
-        return tools.exit.failure(err);
-      }
+      // TODO:
+      // try {
+      //   await commitFile();
+      // } catch (err) {
+      //   tools.log.debug("Something went wrong");
+      //   return tools.exit.failure(err);
+      // }
       tools.exit.success("Pushed to remote repository");
     };
 

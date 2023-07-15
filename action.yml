@@ -3,7 +3,7 @@ description: Updates README with the recent GitHub activity of a user
 author: yiliang114
 
 inputs:
-  CONFIG: # 输入项名称
+  CUSTOM_CONFIG: # 输入项名称
     description: "Your care repos" # 描述
     default: "{}" # 默认值
     required: false # 是否是必填项
