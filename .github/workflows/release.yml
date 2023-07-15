@@ -51,10 +51,10 @@ jobs:
           path: ./dist
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Generate Auto Changelog
-        uses: ahmadawais/action-auto-changelog@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Generate Auto Changelog
+      #   uses: ahmadawais/action-auto-changelog@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
