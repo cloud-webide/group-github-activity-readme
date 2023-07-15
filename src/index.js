@@ -129,6 +129,7 @@ Toolkit.run(
       }
 
       tools.log.debug(`${username}'s activity length is ${rowContent.length}`);
+      fs.writeFileSync(`./${username}-${TARGET_FILE}`, rowContent.join("\n"));
       return content;
     };
 
@@ -233,6 +234,7 @@ Toolkit.run(
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join("\n"));
     tools.log.debug(`writeFileSync: ${readmeContent.length}`);
+    tools.log.debug(`${readmeContent.join("\n")}`);
 
     // Commit to the remote repository
     try {
