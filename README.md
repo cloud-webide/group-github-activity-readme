@@ -13,7 +13,6 @@
 6. ❗ Opened issue [#186701](https://github.com/microsoft/vscode/issues/186701)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-30 08:08:20
 7. 💪 Opened PR [#186607](https://github.com/microsoft/vscode/pull/186607)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-29 08:53:16
 8. ❗ Opened issue [#185312](https://github.com/microsoft/vscode/issues/185312)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-16 08:30:41
-9. ❗ Opened issue [#183890](https://github.com/microsoft/vscode/issues/183890)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-05-31 02:45:06
 
 ### [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n)
 1. 💪 Opened PR [#120](https://github.com/microsoft/vscode-l10n/pull/120)  in [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n) at 2023-07-07 10:08:56
