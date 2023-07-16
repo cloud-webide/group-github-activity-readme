@@ -71,9 +71,11 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
-          title: "automatic release"
+          title: "automatic release "
           files: |
-            ./
+            action.yml
+            ./dist/*
+            README.md
       # - name: Create Release for Tag
       #   id: release_tag
       #   uses: actions/create-release@v1
