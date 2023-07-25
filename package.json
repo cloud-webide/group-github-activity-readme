@@ -9,14 +9,19 @@
   "scripts": {
     "format:check": "prettier --check index.js",
     "format": "prettier --write index.js",
-    "build": "ncc build index.js -o dist"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "@octokit/rest": "^20.0.1",
     "actions-toolkit": "^5.0.0"
   },
   "devDependencies": {
+    "@yiliang114/prettier-config": "^1.1.1",
+    "@yiliang114/tsconfig": "^2.0.3",
     "@zeit/ncc": "^0.22.3",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "typescript": "^5.1.6"
   }
 }
