@@ -42,8 +42,11 @@ jobs:
         with:
           name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
           path: |
-            ./lib
+            ./
+            !src
+            !test
             !.git
+            !.vscode
             !./node_modules
 
   release-please:
@@ -55,7 +58,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: group-github-activity-readme # name：需要下载的 artifact 的名称
-          path: ./lib
+          path: ./
       - name: Display structure of downloaded files
         run: ls -R
       # - name: Generate Auto Changelog

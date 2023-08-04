@@ -34,7 +34,10 @@ jobs:
           name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
           path: |
             ./
+            !src
+            !test
             !.git
+            !.vscode
             !./node_modules
 
   loadEnv:
@@ -54,7 +57,7 @@ jobs:
 
   test:
     needs: [build, loadEnv]
-    name: test lib/index.js
+    name: test distindex.js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

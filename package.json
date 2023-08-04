@@ -2,7 +2,7 @@
   "name": "group-github-activity-readme",
   "version": "1.1.0",
   "description": "Updates README with the recent GitHub activity of some users in some repos",
-  "main": "lib/index.js",
+  "main": "distindex.js",
   "keywords": [
     "github activities",
     "multiple users",
@@ -15,7 +15,8 @@
     "format": "prettier --write src",
     "build": "tsc && ncc build lib/index.js",
     "dev": "tsc --watch",
-    "test-action": "act"
+    "test-action": "act",
+    "test": "jest"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",

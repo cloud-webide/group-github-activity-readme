@@ -42,4 +42,5 @@ branding:
 
 runs:
   using: node16
-  main: ./lib/index.js
+  # lib 是 tsc 构建产物； dist 是 ncc 构建产物。
+  main: ./dist/index.js
