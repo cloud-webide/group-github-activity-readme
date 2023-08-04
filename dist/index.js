@@ -166,15 +166,17 @@ const getDate = (str) => {
  * @returns {String}
  */
 const toUrlFormat = (item) => {
+    var _a, _b;
     if (typeof item !== 'object') {
         return `[${item}](https://github.com/${item})`;
     }
     // 只剩这两个事件了。
     if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-        //  ${item.payload.issue.title}
+        core.info(`issue: ${(_a = item.payload.issue) === null || _a === void 0 ? void 0 : _a.title}`);
         return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
     }
     if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
+        core.info(`pull_request: ${(_b = item.payload.pull_request) === null || _b === void 0 ? void 0 : _b.title}`);
         return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
     }
 };
@@ -216,7 +218,8 @@ const commitFile = async () => {
 const serializers = {
     issues: (item) => {
         const statusDesc = item.state === 'open' ? 'still in Open ❗' : 'had been Close 🔒';
-        return `${capitalize(item.state)}  ${toUrlFormat({
+        // ${capitalize(item.state)}
+        return `${toUrlFormat({
             payload: {
                 issue: item,
             },
@@ -256,10 +259,10 @@ actions_toolkit_1.Toolkit.run(async (tools) => {
             });
             tools.log.debug(`Activity for ${user} in ${repoName}, ${issues.length} issues found, ${pullRequests.length} pullRequests found.`);
             newContents.push(`## ${user} in [${repoName}](https://github.com/${repoName})`, '\n', `### Issue List: `, ...issues.map((item, index) => {
-                tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
+                // tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
                 return `${index + 1}. ${serializers.issues(item)}`;
             }), '\n', `### PR List: `, ...pullRequests.map((item, index) => {
-                tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
+                // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
                 return `${index + 1}. ${serializers.pullRequests(item)}`;
             }), '\n');
             // core.info('Activity Content: ');

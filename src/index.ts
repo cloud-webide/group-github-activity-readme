@@ -61,10 +61,11 @@ const toUrlFormat = (item: any) => {
   }
   // 只剩这两个事件了。
   if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-    //  ${item.payload.issue.title}
+    core.info(`issue: ${item.payload.issue?.title}`);
     return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
   }
   if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
+    core.info(`pull_request: ${item.payload.pull_request?.title}`);
     return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
   }
 };
@@ -111,7 +112,8 @@ const commitFile = async () => {
 const serializers = {
   issues: (item: any) => {
     const statusDesc = item.state === 'open' ? 'still in Open ❗' : 'had been Close 🔒';
-    return `${capitalize(item.state)}  ${toUrlFormat({
+    // ${capitalize(item.state)}
+    return `${toUrlFormat({
       payload: {
         issue: item,
       },
@@ -163,13 +165,13 @@ Toolkit.run(
           '\n',
           `### Issue List: `,
           ...issues.map((item: any, index: number) => {
-            tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
+            // tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
             return `${index + 1}. ${serializers.issues(item)}`;
           }),
           '\n',
           `### PR List: `,
           ...pullRequests.map((item: any, index: number) => {
-            tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
+            // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
             return `${index + 1}. ${serializers.pullRequests(item)}`;
           }),
           '\n',
