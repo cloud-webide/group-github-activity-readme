@@ -8,7 +8,7 @@ import getIssues, { IState } from './api/issue';
 // Get config
 // const GH_REPOS = 'microsoft/vscode-test-web';
 // const GH_USERNAMES = 'yiliang114';
-// const TARGET_FILE = 'TEST_TARGET_FILE.md';
+// const TARGET_FILE = 'README.md';
 // const DEFAULT_PAGE = '1';
 // const DEFAULT_PER_PAGE = '5';
 // const DEFAULT_STATE: IState = 'all';
