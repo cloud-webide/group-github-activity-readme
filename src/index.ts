@@ -103,9 +103,8 @@ const commitFile = async () => {
   await exec('git', ['config', '--global', 'user.email', COMMIT_EMAIL]);
   await exec('git', ['config', '--global', 'user.name', COMMIT_NAME]);
   await exec('git', ['add', TARGET_FILE]);
-  // await exec('git', ['commit', '-m', COMMIT_MSG]);
-  // TODO:
-  // await exec("git", ["push"]);
+  await exec('git', ['commit', '-m', COMMIT_MSG]);
+  await exec('git', ['push']);
 };
 
 const serializers = {
