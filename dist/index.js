@@ -171,10 +171,11 @@ const toUrlFormat = (item) => {
     }
     // 只剩这两个事件了。
     if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-        return `[#${item.payload.issue.number} ${item.payload.issue.title}](${item.payload.issue.html_url})`;
+        //  ${item.payload.issue.title}
+        return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
     }
     if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
-        return `[#${item.payload.pull_request.number} ${item.payload.issue.title}](${item.payload.pull_request.html_url})`;
+        return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
     }
 };
 /**
@@ -255,12 +256,14 @@ actions_toolkit_1.Toolkit.run(async (tools) => {
             });
             tools.log.debug(`Activity for ${user} in ${repoName}, ${issues.length} issues found, ${pullRequests.length} pullRequests found.`);
             newContents.push(`## ${user} in [${repoName}](https://github.com/${repoName})`, '\n', `### Issue List: `, ...issues.map((item, index) => {
+                tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
                 return `${index + 1}. ${serializers.issues(item)}`;
             }), '\n', `### PR List: `, ...pullRequests.map((item, index) => {
+                tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
                 return `${index + 1}. ${serializers.pullRequests(item)}`;
             }), '\n');
-            core.info('Activity Content: ');
-            core.info(newContents.join('\n'));
+            // core.info('Activity Content: ');
+            // core.info(newContents.join('\n'));
         }
     }
     const readmeContent = fs.readFileSync(`./${TARGET_FILE}`, 'utf-8').split('\n');
