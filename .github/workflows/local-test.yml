@@ -1,4 +1,4 @@
-name: test
+name: local test
 
 on:
   push:
@@ -35,7 +35,6 @@ jobs:
           path: |
             .
             !.git
-            !./node_modules
 
   loadEnv:
     runs-on: ubuntu-latest
