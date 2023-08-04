@@ -14,12 +14,17 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "@octokit/core": "^5.0.0",
     "@octokit/rest": "^20.0.1",
-    "actions-toolkit": "^5.0.0"
+    "actions-toolkit": "^5.0.0",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "2.6.12"
   },
   "devDependencies": {
+    "@types/node-fetch": "^2.6.4",
     "@yiliang114/prettier-config": "^1.1.1",
-    "@yiliang114/tsconfig": "^2.0.3",
+    "@yiliang114/tsconfig": "^2.0.4",
     "@zeit/ncc": "^0.22.3",
     "prettier": "^2.0.5",
     "typescript": "^5.1.6"
