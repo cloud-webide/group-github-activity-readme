@@ -1,0 +1,9 @@
+{
+  "extends": "@yiliang114/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./lib"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
