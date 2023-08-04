@@ -281,7 +281,7 @@ actions_toolkit_1.Toolkit.run(async (tools) => {
     if (!newContents.length) {
         tools.exit.success('No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity');
     }
-    newContents = [...readmeContent.slice(0, startIdx), ...newContents, ...readmeContent.slice(endIdx)];
+    newContents = [...readmeContent.slice(0, startIdx - 1), ...newContents, ...readmeContent.slice(endIdx)];
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
     tools.log.debug('Wrote to README');

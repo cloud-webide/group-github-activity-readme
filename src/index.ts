@@ -201,7 +201,7 @@ Toolkit.run(
       );
     }
 
-    newContents = [...readmeContent.slice(0, startIdx), ...newContents, ...readmeContent.slice(endIdx)];
+    newContents = [...readmeContent.slice(0, startIdx - 1), ...newContents, ...readmeContent.slice(endIdx)];
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
