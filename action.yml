@@ -11,6 +11,18 @@ inputs:
     description: "The users you care about" # 多个 user 使用 , 分割
     default: ${{ github.repository_owner }} # group or user
     required: false
+  DEFAULT_PAGE:
+    description: "Github Issue Page Number"
+    default: "1"
+    required: false
+  DEFAULT_PER_PAGE:
+    description: "Github Issue Page Size"
+    default: "100"
+    required: false
+  DEFAULT_STATUS:
+    description: "Github Issue State"
+    default: "all"
+    required: false
   COMMIT_NAME:
     description: "Name of the committer"
     default: "github-actions[bot]"
