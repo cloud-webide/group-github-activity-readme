@@ -103,7 +103,7 @@ const commitFile = async () => {
   await exec('git', ['config', '--global', 'user.email', COMMIT_EMAIL]);
   await exec('git', ['config', '--global', 'user.name', COMMIT_NAME]);
   await exec('git', ['add', TARGET_FILE]);
-  await exec('git', ['commit', '-m', COMMIT_MSG]);
+  // await exec('git', ['commit', '-m', COMMIT_MSG]);
   // TODO:
   // await exec("git", ["push"]);
 };
@@ -200,7 +200,7 @@ const run = async () => {
   newContents = [...readmeContent.slice(0, startIdx), ...newContents, ...readmeContent.slice(endIdx)];
 
   // Update README
-  fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join('\n'));
+  fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
 
   core.info(readmeContent.join('\n'));
 
@@ -214,7 +214,7 @@ const run = async () => {
     return;
   }
   // tools.exit.success("Wrote to README");
-  console.log('Wrote to README');
+  console.log('Wrote to ' + TARGET_FILE);
   return;
 };
 
