@@ -19,7 +19,7 @@ inputs:
     description: "Github Issue Page Size"
     default: "100"
     required: false
-  DEFAULT_STATUS:
+  DEFAULT_STATE:
     description: "Github Issue State"
     default: "all"
     required: false
