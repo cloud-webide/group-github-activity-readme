@@ -5,22 +5,9 @@
 <!--START_SECTION:activity-->
 ## yiliang114's activities: 
 ### [microsoft/vscode](https://github.com/microsoft/vscode)
-1. 💪 Opened PR [#187902](https://github.com/microsoft/vscode/pull/187902)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-14 06:11:21
-2. ❗ Opened issue [#187826](https://github.com/microsoft/vscode/issues/187826)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-13 12:36:02
-3. 💪 Opened PR [#187796](https://github.com/microsoft/vscode/pull/187796)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-13 06:25:23
-4. ❗ Opened issue [#187795](https://github.com/microsoft/vscode/issues/187795)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-13 06:23:44
-5. ❗ Opened issue [#187788](https://github.com/microsoft/vscode/issues/187788)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-13 02:47:35
-6. ❗ Opened issue [#186701](https://github.com/microsoft/vscode/issues/186701)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-30 08:08:20
-7. 💪 Opened PR [#186607](https://github.com/microsoft/vscode/pull/186607)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-29 08:53:16
-8. ❗ Opened issue [#185312](https://github.com/microsoft/vscode/issues/185312)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-06-16 08:30:41
-
-### [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n)
-1. 💪 Opened PR [#120](https://github.com/microsoft/vscode-l10n/pull/120)  in [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n) at 2023-07-07 10:08:56
-2. ❗ Opened issue [#119](https://github.com/microsoft/vscode-l10n/issues/119)  in [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n) at 2023-07-07 09:33:51
-3. 💪 Opened PR [#118](https://github.com/microsoft/vscode-l10n/pull/118)  in [microsoft/vscode-l10n](https://github.com/microsoft/vscode-l10n) at 2023-06-30 07:22:05
-
-### [microsoft/vscode-test-web](https://github.com/microsoft/vscode-test-web)
-1. 💪 Opened PR [#86](https://github.com/microsoft/vscode-test-web/pull/86)  in [microsoft/vscode-test-web](https://github.com/microsoft/vscode-test-web) at 2023-06-27 08:48:30
+1. 💪 Opened PR [#189557](https://github.com/microsoft/vscode/pull/189557)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-08-03 14:59:59
+2. ❗ Opened issue [#189556](https://github.com/microsoft/vscode/issues/189556)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-08-03 14:58:06
+3. 💪 Opened PR [#188887](https://github.com/microsoft/vscode/pull/188887)  in [microsoft/vscode](https://github.com/microsoft/vscode) at 2023-07-26 03:25:41
 
 ## harbin1053020115's activities: 
 ### [microsoft/vscode](https://github.com/microsoft/vscode)
