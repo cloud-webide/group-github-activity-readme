@@ -1,0 +1,18 @@
+name: local dev test
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  test:
+    name: test dist/index.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          GH_USERNAMES: "yiliang114, harbin1053020115"
+          GH_REPOS: "microsoft/vscode, microsoft/vscode-l10n, microsoft/vscode-test-web, coder/code-server"
