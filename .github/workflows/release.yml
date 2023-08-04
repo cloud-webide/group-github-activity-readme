@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Generate build and check code formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('./pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7.1.0
+      - name: Install NPM dependencies
+        run: pnpm i --frozen-lockfile --ignore-scripts
+      - name: Code Style Check
+        run: pnpm run format:check
+      - name: Build
+        run: pnpm run build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
+          path: |
+            ./dist
+            !.git
+            !./node_modules
+
+  release-please:
+    needs: [build]
+    name: Release Please
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: group-github-activity-readme # name：需要下载的 artifact 的名称
+          path: ./dist
+      - name: Display structure of downloaded files
+        run: ls -R
+      # - name: Generate Auto Changelog
+      #   uses: ahmadawais/action-auto-changelog@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - run: npx semantic-release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 使用 tyankatsu0105/read-package-version-actions@v1 工具来读取对应的package.json 数据
+      # - name: Read package.json
+      #   uses: tyankatsu0105/read-package-version-actions@v1
+      #   with:
+      #     path: "./"
+      #   id: package-version
+      # - uses: "marvinpinto/action-automatic-releases@latest"
+      #   with:
+      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     automatic_release_tag: "latest"
+      #     prerelease: true
+      #     title: "automatic release "
+      #     files: |
+      #       action.yml
+      #       ./dist/*
+      #       README.md
+      # - name: Create Release for Tag
+      #   id: release_tag
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 这块需要用到 github的token，因为需要对分之进行代码推送
+      #   with:
+      #     tag_name: v${{ steps.package-version.outputs.version }}
+      #     release_name: Release v${{ steps.package-version.outputs.version }}
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: standard-version
+          changelog-types: '[{"type": "types", "section":"Types", "hidden": false},{"type": "revert", "section":"Reverts", "hidden": false},{"type": "feat", "section": "Features", "hidden": false},{"type": "fix", "section": "Bug Fixes", "hidden": false},{"type": "improvement", "section": "Feature Improvements", "hidden": false},{"type": "docs", "section":"Docs", "hidden": false},{"type": "style", "section":"Styling", "hidden": false},{"type": "refactor", "section":"Code Refactoring", "hidden": false},{"type": "perf", "section":"Performance Improvements", "hidden": false},{"type": "test", "section":"Tests", "hidden": false},{"type": "build", "section":"Build System", "hidden": false},{"type": "ci", "section":"CI", "hidden":false}]'

@@ -1,9 +1,13 @@
 {
   "name": "group-github-activity-readme",
-  "version": "0.0.1",
-  "description": "Updates README with the recent GitHub activity of a user",
+  "version": "1.0.6",
+  "description": "Updates README with the recent GitHub activity of some users in some repos",
   "main": "dist/index.js",
-  "keywords": [],
+  "keywords": [
+    "github activities",
+    "multiple users",
+    "multiple repos"
+  ],
   "author": "yiliang114",
   "license": "MIT",
   "scripts": {
@@ -19,7 +23,8 @@
     "actions-toolkit": "^5.0.0",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
-    "node-fetch": "2.6.12"
+    "node-fetch": "2.6.12",
+    "dayjs": "^1.11.9"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.4",

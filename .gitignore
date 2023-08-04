@@ -1,4 +1,7 @@
 node_modules
 dist
 lib
+dist
 .env
+config.json
+local.config.json
