@@ -61,10 +61,10 @@ const toUrlFormat = (item: any) => {
   }
   // 只剩这两个事件了。
   if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-    return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
+    return `[#${item.payload.issue.number} ${item.payload.issue.title}](${item.payload.issue.html_url})`;
   }
   if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
-    return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
+    return `[#${item.payload.pull_request.number} ${item.payload.issue.title}](${item.payload.pull_request.html_url})`;
   }
 };
 
@@ -200,7 +200,7 @@ Toolkit.run(
 
     // Update README
     fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
-    tools.exit.success('Wrote to README');
+    tools.log.debug('Wrote to README');
 
     // Commit to the remote repository
     try {
