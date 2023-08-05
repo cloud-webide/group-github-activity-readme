@@ -1,4 +1,4 @@
-name: local dev test
+name: Dev test
 
 on:
   push:
