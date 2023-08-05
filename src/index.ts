@@ -176,14 +176,14 @@ Toolkit.run(
               ]
             : []),
           ...(pullRequests.length > 0
-            ? []
-            : [
+            ? [
                 `### PR List: `,
                 ...pullRequests.map((item: any, index: number) => {
                   // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
                   return `${index + 1}. ${serializers.pullRequests(item)}`;
                 }),
-              ]),
+              ]
+            : []),
         );
 
         // core.info('Activity Content: ');
