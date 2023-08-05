@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.1](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.0...v1.2.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* 使用 release-please-action 发布时，提交构建产物 Close [#15](https://github.com/cloud-webide/group-github-activity-readme/issues/15) ([eed6cdd](https://github.com/cloud-webide/group-github-activity-readme/commit/eed6cdde47c66896e4878672daf3fcb9f6b2136d))
+* 使用 release-please-action 发布时，提交构建产物 Close [#15](https://github.com/cloud-webide/group-github-activity-readme/issues/15) ([5ff2234](https://github.com/cloud-webide/group-github-activity-readme/commit/5ff22349e832bb0a10a26b3919d40a2cb544ffc4))
+* 使用 release-please-action 发布时，提交构建产物 Close [#15](https://github.com/cloud-webide/group-github-activity-readme/issues/15) ([9b9128a](https://github.com/cloud-webide/group-github-activity-readme/commit/9b9128adabd9ed65c5ad86898c593610c65f51f7))
+* 使用 release-please-action 发布时，提交构建产物 Close [#15](https://github.com/cloud-webide/group-github-activity-readme/issues/15) ([3136f56](https://github.com/cloud-webide/group-github-activity-readme/commit/3136f5665dbd77b94e801300f751a9d0094d66a9))
+
 ## [1.2.0](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.1.0...v1.2.0) (2023-08-05)
 
 
