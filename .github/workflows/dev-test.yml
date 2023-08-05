@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    name: test dist/index.js
+    name: test ./index.js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

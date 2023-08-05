@@ -13,7 +13,7 @@
   "scripts": {
     "format:check": "prettier --check src",
     "format": "prettier --write src",
-    "build": "tsc && ncc build lib/index.js",
+    "build": "tsc && ncc build lib/index.js -o ./",
     "dev": "tsc --watch",
     "test-action": "act",
     "test": "jest"
