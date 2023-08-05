@@ -43,10 +43,10 @@ inputs:
     description: "The file location to write changes to"
     default: "README.md"
     required: false
-  CUSTOM_CONFIG: # 输入项名称
-    description: "Your care repos" # 描述
-    default: "{}" # 默认值
-    required: false # 是否是必填项
+  # CUSTOM_CONFIG: # 输入项名称
+  #   description: "Your care repos" # 描述
+  #   default: "{}" # 默认值
+  #   required: false # 是否是必填项
 
 branding:
   color: yellow
@@ -54,5 +54,5 @@ branding:
 
 runs:
   using: node16
-  # lib 是 tsc 构建产物； dist 是 ncc 构建产物。
-  main: ./dist/index.js
+  # lib 是 tsc 构建产物； dist 是 ncc 构建产物; 最终 release 时，只发布 dist/index.js 到根目录
+  main: index.js
