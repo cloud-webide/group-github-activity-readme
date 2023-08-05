@@ -1,6 +1,6 @@
 {
   "name": "group-github-activity-readme",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Updates README with the recent GitHub activity of some users in some repos",
   "main": "distindex.js",
   "keywords": [
