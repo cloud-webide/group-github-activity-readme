@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.4](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.3...v1.2.4) (2023-08-05)
+
+
+### Bug Fixes
+
+* use changelogithub ([bd33a87](https://github.com/cloud-webide/group-github-activity-readme/commit/bd33a8731ae17aca50550124774692ddfde40b8e))
+* use changelogithub ([40c0a09](https://github.com/cloud-webide/group-github-activity-readme/commit/40c0a09a26521fe1a42ea8da0b780ad108aae2a0))
+* 删除多余换行符 & 删除空的目录模版 ([6b9a3d6](https://github.com/cloud-webide/group-github-activity-readme/commit/6b9a3d644bd17b09fffe7fffb0858728bf44fe62))
+* 构建产物到根目录（便于  gh release upload 更新发布单文件产物） ([b6baa8b](https://github.com/cloud-webide/group-github-activity-readme/commit/b6baa8b017f7386cdcc3365eda0362f8c0acc8f8))
+
 ## [1.2.3](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.2...v1.2.3) (2023-08-05)
 
 
