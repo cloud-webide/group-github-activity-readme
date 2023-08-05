@@ -93,6 +93,12 @@ jobs:
       #   with:
       #     tag_name: v${{ steps.package-version.outputs.version }}
       #     release_name: Release v${{ steps.package-version.outputs.version }}
+      # TODO: 一直会报错，先注释。 https://github.com/cloud-webide/group-github-activity-readme/actions/runs/5770035121/job/15642692274
+      # 美化 release 页内容 use https://github.com/antfu/changelogithub
+      - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: release
         with:
@@ -107,9 +113,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ steps.release.outputs.tag_name }} ./index.js
-      # TODO: 一直会报错，先注释。 https://github.com/cloud-webide/group-github-activity-readme/actions/runs/5770035121/job/15642692274
-      # 美化 release 页内容 use https://github.com/antfu/changelogithub
-      # - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
-      #   if: ${{ steps.release.outputs.release_created }}
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
