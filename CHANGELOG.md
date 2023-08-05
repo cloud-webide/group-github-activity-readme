@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.6](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.5...v1.2.6) (2023-08-05)
+
+
+### Bug Fixes
+
+* use changelogithub ([fd9e5ad](https://github.com/cloud-webide/group-github-activity-readme/commit/fd9e5ad4a58516e233dae1778a10fe02a89ef789))
+* 其他项目在执行是，会找不到 ./index.js ([bf2f749](https://github.com/cloud-webide/group-github-activity-readme/commit/bf2f749749b9599b054979369073305d06cf30b1))
+
 ## [1.2.5](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.4...v1.2.5) (2023-08-05)
 
 
