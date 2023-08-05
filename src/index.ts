@@ -163,20 +163,27 @@ Toolkit.run(
         );
 
         newContents.push(
-          `## ${user} in [${repoName}](https://github.com/${repoName})`,
-          '\n',
-          `### Issue List: `,
-          ...issues.map((item: any, index: number) => {
-            // tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
-            return `${index + 1}. ${serializers.issues(item)}`;
-          }),
-          '\n',
-          `### PR List: `,
-          ...pullRequests.map((item: any, index: number) => {
-            // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
-            return `${index + 1}. ${serializers.pullRequests(item)}`;
-          }),
-          '\n',
+          ...(issues.length + pullRequests.length > 0
+            ? [`## ${user} in [${repoName}](https://github.com/${repoName})`]
+            : []),
+          ...(issues.length > 0
+            ? [
+                `### Issue List: `,
+                ...issues.map((item: any, index: number) => {
+                  // tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
+                  return `${index + 1}. ${serializers.issues(item)}`;
+                }),
+              ]
+            : []),
+          ...(pullRequests.length > 0
+            ? []
+            : [
+                `### PR List: `,
+                ...pullRequests.map((item: any, index: number) => {
+                  // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
+                  return `${index + 1}. ${serializers.pullRequests(item)}`;
+                }),
+              ]),
         );
 
         // core.info('Activity Content: ');
