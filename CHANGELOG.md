@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.2.0](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.1.0...v1.2.0) (2023-08-05)
+
+
+### Features
+
+* 使用 @vercel/ncc 将 ts 编译产物打成一个文件（action 执行不需要安装依赖了） ([677c317](https://github.com/cloud-webide/group-github-activity-readme/commit/677c317860dec3b29542aeaa13a121b879d48bcc))
+* 使用 @vercel/ncc 将 ts 编译产物打成一个文件（action 执行不需要安装依赖了） ([686bc34](https://github.com/cloud-webide/group-github-activity-readme/commit/686bc348eda4a0f403ddceed17b8c846df5a5d46))
+* 修改活动内容模版 透出标题 ([0d999e6](https://github.com/cloud-webide/group-github-activity-readme/commit/0d999e636000c8596196c19a664936dd33018438))
+* 修改活动内容模版 透出标题 ([2b4bd1c](https://github.com/cloud-webide/group-github-activity-readme/commit/2b4bd1c275a081336f238cde340c7092804a8ea6))
+* 修改活动内容模版 透出标题 ([b915468](https://github.com/cloud-webide/group-github-activity-readme/commit/b915468449f19ad5614a08d5e5cefa2bbdab7c42))
+* 修改活动内容模版 透出标题 ([508af85](https://github.com/cloud-webide/group-github-activity-readme/commit/508af857e0253b1631f11deb842faa86d1df952c))
+* 修改活动内容模版 透出标题 ([3bc68ca](https://github.com/cloud-webide/group-github-activity-readme/commit/3bc68ca23b7ff884b4b0c54649db02dca863b90b))
+
+
+### Bug Fixes
+
+* Error: Cannot find module '@actions/core' Close [#3](https://github.com/cloud-webide/group-github-activity-readme/issues/3) ([6c91610](https://github.com/cloud-webide/group-github-activity-readme/commit/6c916109d893d7dc6c42a86490ef25d546d52606))
+* 填充 action 默认值 ([7453138](https://github.com/cloud-webide/group-github-activity-readme/commit/745313862c70f5da704d15ffd59f89e9415cb253))
+* 填充 action 默认值 ([6bb2252](https://github.com/cloud-webide/group-github-activity-readme/commit/6bb22521470407d3c6ca0a2be46264c9abba8e72))
+* 多用户 action 处理 ([c19b415](https://github.com/cloud-webide/group-github-activity-readme/commit/c19b4158ca5a60026a68f45a524ad7de3e3062f7))
+* 多用户 action 处理 ([0164cf1](https://github.com/cloud-webide/group-github-activity-readme/commit/0164cf1f986e821da1c2973ac1887edcc2c6bbf8))
+* 恢复 &lt;!--START_SECTION:activity--&gt; ([6bd0159](https://github.com/cloud-webide/group-github-activity-readme/commit/6bd0159d73e3b0126e62b64b8fee04b2c2852464))
+* 恢复 &lt;!--START_SECTION:activity--&gt; ([42bcb6c](https://github.com/cloud-webide/group-github-activity-readme/commit/42bcb6c4b9e6a995da27de5414bb0f6c4492903b))
+* 提交 readme & build ([950ee76](https://github.com/cloud-webide/group-github-activity-readme/commit/950ee766d2bdd0c4fcd999611489556112b9304c))
+
 ## [1.1.0](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.0.4...v1.1.0) (2023-08-04)
 
 
