@@ -57,7 +57,7 @@ jobs:
 
   test:
     needs: [build, loadEnv]
-    name: test ./index.js
+    name: test dist/index.js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
