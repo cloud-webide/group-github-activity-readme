@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.7](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.6...v1.2.7) (2023-08-05)
+
+
+### Bug Fixes
+
+* PR List 模版渲染逻辑 ([9a93c5f](https://github.com/cloud-webide/group-github-activity-readme/commit/9a93c5fa07555eaf36e44de1e6173573874f99c2))
+
 ## [1.2.6](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.5...v1.2.6) (2023-08-05)
 
 
