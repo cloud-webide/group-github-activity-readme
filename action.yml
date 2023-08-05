@@ -55,4 +55,4 @@ branding:
 runs:
   using: node16
   # lib 是 tsc 构建产物； dist 是 ncc 构建产物; 最终 release 时，只发布 dist/index.js 到根目录
-  main: index.js
+  main: dist/index.js
