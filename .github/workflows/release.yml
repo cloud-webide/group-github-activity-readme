@@ -108,5 +108,6 @@ jobs:
         run: gh release upload ${{ steps.release.outputs.tag_name }} ./
       # 美化 release 页内容 use https://github.com/antfu/changelogithub
       - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
+        if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
