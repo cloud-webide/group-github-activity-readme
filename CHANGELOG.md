@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.2...v1.2.3) (2023-08-05)
+
+
+### Bug Fixes
+
+* 使用 release-please-action 发布时，提交构建产物 Close [#15](https://github.com/cloud-webide/group-github-activity-readme/issues/15) ([2e28a72](https://github.com/cloud-webide/group-github-activity-readme/commit/2e28a72af49a1e00f9eb19cd010a1f3bc42f9f37))
+
 ## [1.2.2](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.1...v1.2.2) (2023-08-05)
 
 
