@@ -61,12 +61,14 @@ const toUrlFormat = (item: any) => {
   }
   // 只剩这两个事件了。
   if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-    core.info(`issue: ${item.payload.issue?.title}`);
-    return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
+    const title = `${item.payload.issue?.title} #${item.payload.issue.number}`.trim();
+    core.info(`issue: ${title}`);
+    return `[${title}](${item.payload.issue.html_url})`;
   }
   if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
-    core.info(`pull_request: ${item.payload.pull_request?.title}`);
-    return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
+    const title = `${item.payload.pull_request?.title} #${item.payload.pull_request.number}`.trim();
+    core.info(`pull_request: ${title}`);
+    return `[${title}](${item.payload.pull_request.html_url})`;
   }
 };
 
