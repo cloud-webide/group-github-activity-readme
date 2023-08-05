@@ -38,17 +38,18 @@ jobs:
             exit 1
           fi
         id: diff
+      # TODO: 自动构建并提交
       # If index.js was different than expected, then perform test tasks
-      - name: Commit Build dist/ directory
-        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git commit -m "[skip actions] build(dist): update dist/ directory" -a
-          git push origin HEAD:${{ github.ref }}
+      # - name: Commit Build dist/ directory
+      #   if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     git commit -m "[skip actions] build(dist): update dist/ directory" -a
+      #     git push origin HEAD:${{ github.ref }}
       # If index.js was different than expected, then perform test tasks
       - uses: ./
-        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+        # if: ${{ failure() && steps.diff.conclusion == 'failure' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -13,7 +13,8 @@
   "scripts": {
     "format:check": "prettier --check src",
     "format": "prettier --write src",
-    "build": "ncc build src/index.ts && git add -f dist/",
+    "build": "ncc build src/index.ts && git add dist/*",
+    "build-commit": "git commit -m '[skip actions] build(dist): update dist'",
     "dev": "tsc --watch",
     "test-action": "act",
     "test": "jest"
