@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.5](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.4...v1.2.5) (2023-08-05)
+
+
+### Bug Fixes
+
+* 删除多余依赖 & 修复 gh release  upload 构建产物路径 ([b1c5c79](https://github.com/cloud-webide/group-github-activity-readme/commit/b1c5c79b73c7fbfdf67a908a794da0ca7d50e6b6))
+
 ## [1.2.4](https://github.com/cloud-webide/group-github-activity-readme/compare/v1.2.3...v1.2.4) (2023-08-05)
 
 
