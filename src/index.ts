@@ -61,10 +61,14 @@ const toUrlFormat = (item: any) => {
   }
   // 只剩这两个事件了。
   if (Object.hasOwnProperty.call(item.payload, 'issue')) {
-    return `[#${item.payload.issue.number}](${item.payload.issue.html_url})`;
+    const title = `${item.payload.issue?.title} #${item.payload.issue.number}`.trim();
+    core.info(`issue: ${title}`);
+    return `[${title}](${item.payload.issue.html_url})`;
   }
   if (Object.hasOwnProperty.call(item.payload, 'pull_request')) {
-    return `[#${item.payload.pull_request.number}](${item.payload.pull_request.html_url})`;
+    const title = `${item.payload.pull_request?.title} #${item.payload.pull_request.number}`.trim();
+    core.info(`pull_request: ${title}`);
+    return `[${title}](${item.payload.pull_request.html_url})`;
   }
 };
 
@@ -103,15 +107,15 @@ const commitFile = async () => {
   await exec('git', ['config', '--global', 'user.email', COMMIT_EMAIL]);
   await exec('git', ['config', '--global', 'user.name', COMMIT_NAME]);
   await exec('git', ['add', TARGET_FILE]);
-  // await exec('git', ['commit', '-m', COMMIT_MSG]);
-  // TODO:
-  // await exec("git", ["push"]);
+  await exec('git', ['commit', '-m', COMMIT_MSG]);
+  await exec('git', ['push']);
 };
 
 const serializers = {
   issues: (item: any) => {
     const statusDesc = item.state === 'open' ? 'still in Open ❗' : 'had been Close 🔒';
-    return `${capitalize(item.state)}  ${toUrlFormat({
+    // ${capitalize(item.state)}
+    return `${toUrlFormat({
       payload: {
         issue: item,
       },
@@ -119,7 +123,7 @@ const serializers = {
   },
   pullRequests: (item: any) => {
     const emoji = item.state === 'open' ? 'still in Open 💪' : 'had been Closed ❌';
-    const statusDesc = !!item.pull_request.merged_at ? 'had been Merged 🎉' : `${capitalize(item.state)} ${emoji} `;
+    const statusDesc = !!item.pull_request.merged_at ? 'had been Merged 🎉' : `${emoji} `;
     return `${toUrlFormat({
       payload: {
         pull_request: item,
@@ -128,180 +132,94 @@ const serializers = {
   },
 };
 
-const run = async () => {
-  const users = GH_USERNAMES.split(',');
-  const namespaces = GH_REPOS.split(',');
+Toolkit.run(
+  async tools => {
+    const users = GH_USERNAMES.split(',').map(user => user.trim());
+    const namespaces = GH_REPOS.split(',').map(user => user.trim());
+    // 最好的处理方式是矩阵 Matrix
+    tools.log.debug(`共有 ${users.length} 个用户活动需要监听，分别是 ${users}`);
 
-  // '# Team activities', '\n'
-  let newContents = [];
-  for (const user of users) {
-    for (const namespace of namespaces) {
-      const [owner, repo] = namespace.split('/');
-      const {
-        issues = [],
-        pullRequests = [],
-        repository_name,
-      } = await getIssues({
-        owner,
-        repo,
-        creator: user,
-        page: parseInt(DEFAULT_PAGE),
-        per_page: parseInt(DEFAULT_PER_PAGE),
-        state: DEFAULT_STATE as IState,
-        // TODO:
-        // since: '2021-01-01T00:00:00Z',
-      });
+    let newContents = [];
+    for (const user of users) {
+      for (const namespace of namespaces) {
+        const [owner, repo] = namespace.split('/');
+        const repoName = `${owner}/${repo}`;
 
-      const repoName = `${owner}/${repo}`;
-      newContents.push(
-        `## ${user} in [${repoName}](https://github.com/${repoName})`,
-        '\n',
-        `### Issue List: `,
-        ...issues.map((item: any, index: number) => {
-          return `${index + 1}. ${serializers.issues(item)}`;
-        }),
-        '\n',
-        `### PR List: `,
-        ...pullRequests.map((item: any, index: number) => {
-          return `${index + 1}. ${serializers.pullRequests(item)}`;
-        }),
-        '\n',
-      );
+        //  Get the user's public events
+        tools.log.debug(`Getting activity for ${user} in ${repoName}.`);
+        const { issues = [], pullRequests = [] } = await getIssues({
+          owner,
+          repo,
+          creator: user,
+          page: parseInt(DEFAULT_PAGE),
+          per_page: parseInt(DEFAULT_PER_PAGE),
+          state: DEFAULT_STATE as IState,
+          // TODO:
+          // since: '2021-01-01T00:00:00Z',
+        });
 
-      console.log(newContents);
+        tools.log.debug(
+          `Activity for ${user} in ${repoName}, ${issues.length} issues found, ${pullRequests.length} pullRequests found.`,
+        );
+
+        newContents.push(
+          `## ${user} in [${repoName}](https://github.com/${repoName})`,
+          '\n',
+          `### Issue List: `,
+          ...issues.map((item: any, index: number) => {
+            // tools.log.debug(`Issue ===== ${index}: `, JSON.stringify(item, null, 2));
+            return `${index + 1}. ${serializers.issues(item)}`;
+          }),
+          '\n',
+          `### PR List: `,
+          ...pullRequests.map((item: any, index: number) => {
+            // tools.log.debug(`PR ===== ${index}: `, JSON.stringify(item, null, 2));
+            return `${index + 1}. ${serializers.pullRequests(item)}`;
+          }),
+          '\n',
+        );
+
+        // core.info('Activity Content: ');
+        // core.info(newContents.join('\n'));
+      }
     }
-  }
 
-  const readmeContent = fs.readFileSync(`./${TARGET_FILE}`, 'utf-8').split('\n');
+    const readmeContent = fs.readFileSync(`./${TARGET_FILE}`, 'utf-8').split('\n');
 
-  // Find the index corresponding to <!--START_SECTION:activity--> comment
-  let startIdx = readmeContent.findIndex(content => content.trim() === '<!--START_SECTION:activity-->');
+    // Find the index corresponding to <!--START_SECTION:activity--> comment
+    let startIdx = readmeContent.findIndex(content => content.trim() === '<!--START_SECTION:activity-->');
 
-  // Early return in case the <!--START_SECTION:activity--> comment was not found
-  if (startIdx === -1) {
-    // return tools.exit.failure(`Couldn't find the <!--START_SECTION:activity--> comment. Exiting!`);
-    throw Error(`Couldn't find the <!--START_SECTION:activity--> comment. Exiting!`);
-    return;
-  }
+    // Early return in case the <!--START_SECTION:activity--> comment was not found
+    if (startIdx === -1) {
+      return tools.exit.failure(`Couldn't find the <!--START_SECTION:activity--> comment. Exiting!`);
+    }
 
-  // Find the index corresponding to <!--END_SECTION:activity--> comment
-  const endIdx = readmeContent.findIndex(content => content.trim() === '<!--END_SECTION:activity-->');
+    // Find the index corresponding to <!--END_SECTION:activity--> comment
+    const endIdx = readmeContent.findIndex(content => content.trim() === '<!--END_SECTION:activity-->');
 
-  if (!newContents.length) {
-    // tools.exit.success(
-    //   'No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity',
-    // );
-    console.info(
-      'No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity',
-    );
-    return;
-  }
+    if (!newContents.length) {
+      tools.exit.success(
+        'No PullRequest/Issue/IssueComment/Release events found. Leaving README unchanged with previous activity',
+      );
+    }
 
-  newContents = [...readmeContent.slice(0, startIdx), ...newContents, ...readmeContent.slice(endIdx)];
+    newContents = [...readmeContent.slice(0, startIdx + 1), ...newContents, ...readmeContent.slice(endIdx)];
 
-  // Update README
-  fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
+    // Update README
+    fs.writeFileSync(`./${TARGET_FILE}`, newContents.join('\n'));
+    tools.log.debug('Wrote to README');
 
-  core.info(readmeContent.join('\n'));
-
-  // Commit to the remote repository
-  try {
-    await commitFile();
-  } catch (err) {
-    // tools.log.debug("Something went wrong");
-    // return tools.exit.failure(err);
-    console.error('Something went wrong');
-    return;
-  }
-  // tools.exit.success("Wrote to README");
-  console.log('Wrote to ' + TARGET_FILE);
-  return;
-};
-
-run();
-
-// Toolkit.run(
-//   async tools => {
-//     const users = GH_USERNAMES.split(',');
-//     // 最好的处理方式是矩阵 Matrix
-//     tools.log.debug(`共有 ${users.length} 个用户活动需要监听，分别是 ${users}`);
-
-//     const getActivitiesByUserName = async (username: string) => {
-//       // Get the user's public events
-//       tools.log.debug(`Getting activity for ${username}`);
-//       // TODO: replace
-//       const events = await tools.github.activity.listPublicEventsForUser({
-//         username: username,
-//         per_page: 100,
-//       });
-//       tools.log.debug(`Activity for ${username}, ${events.data.length} events found.`);
-
-//       const content = events.data
-//         // Filter out any boring activity
-//         .filter((event: any) => serializers.hasOwnProperty(event.type))
-//         // We only have five lines to work with
-//         .slice(0, MAX_LINES)
-//         // Call the serializer to construct a string
-//         .map((item: any) => (serializers as any)[item.type](item));
-
-//       if (content.length < 5) {
-//         tools.log.info('Found less than 5 activities');
-//       }
-
-//       const oldContent = readmeContent.slice(startIdx + 1, endIdx).join('\n');
-//       const newContent = content.map((line: string, idx: number) => `${idx + 1}. ${line}`).join('\n');
-
-//       if (oldContent.trim() === newContent.trim()) tools.exit.success('No changes detected');
-
-//       startIdx++;
-
-//       // Recent GitHub Activity content between the comments
-//       const readmeActivitySection = readmeContent.slice(startIdx, endIdx);
-//       if (!readmeActivitySection.length) {
-//         content.some((line: string, idx: number) => {
-//           // User doesn't have 5 public events
-//           if (!line) {
-//             return true;
-//           }
-//           readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
-//         });
-//         tools.log.success(`Wrote to ${TARGET_FILE}`);
-//       } else {
-//         // It is likely that a newline is inserted after the <!--START_SECTION:activity--> comment (code formatter)
-//         let count = 0;
-
-//         readmeActivitySection.some((line, idx) => {
-//           // User doesn't have 5 public events
-//           if (!content[count]) {
-//             return true;
-//           }
-//           if (line !== '') {
-//             readmeContent[startIdx + idx] = `${count + 1}. ${content[count]}`;
-//             count++;
-//           }
-//         });
-//         tools.log.success(`Updated ${TARGET_FILE} with the recent activity`);
-//       }
-
-//       // Update README
-//       fs.writeFileSync(`./${TARGET_FILE}`, readmeContent.join('\n'));
-
-//       // Commit to the remote repository
-//       try {
-//         await commitFile();
-//       } catch (err: any) {
-//         tools.log.debug('Something went wrong');
-//         return tools.exit.failure(err);
-//       }
-//       tools.exit.success('Pushed to remote repository');
-//     };
-
-//     for (const username of users) {
-//       await getActivitiesByUserName(username);
-//     }
-//   },
-//   {
-//     event: ['schedule', 'workflow_dispatch', 'push'],
-//     secrets: ['GITHUB_TOKEN'],
-//   },
-// );
+    // Commit to the remote repository
+    try {
+      await commitFile();
+    } catch (err: any) {
+      tools.log.debug('Something went wrong');
+      return tools.exit.failure(err);
+    }
+    tools.exit.success('Pushed to remote repository');
+  },
+  {
+    event: ['schedule', 'workflow_dispatch', 'push'],
+    secrets: ['GITHUB_TOKEN'],
+  },
+);
