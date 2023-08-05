@@ -123,7 +123,7 @@ const serializers = {
   },
   pullRequests: (item: any) => {
     const emoji = item.state === 'open' ? 'still in Open 💪' : 'had been Closed ❌';
-    const statusDesc = !!item.pull_request.merged_at ? 'had been Merged 🎉' : `${capitalize(item.state)} ${emoji} `;
+    const statusDesc = !!item.pull_request.merged_at ? 'had been Merged 🎉' : `${emoji} `;
     return `${toUrlFormat({
       payload: {
         pull_request: item,
