@@ -4,5 +4,3 @@ lib
 .env
 config.json
 local.config.json
-# 根目录的 index.js 是构建产物
-index.js

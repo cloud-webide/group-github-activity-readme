@@ -29,7 +29,26 @@ jobs:
         run: pnpm run format:check
       - name: Build
         run: pnpm run build
+      # 检查是否有变化
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+      # If index.js was different than expected, then perform test tasks
+      - name: Commit Build dist/ directory
+        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git commit -m "[skip actions] build(dist): update dist/ directory" -a
+          git push origin HEAD:${{ github.ref }}
+      # If index.js was different than expected, then perform test tasks
       - uses: ./
+        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

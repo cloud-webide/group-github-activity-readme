@@ -1,14 +1,11 @@
-# 监听 master 分支
+name: Contributes
+
 on:
   push:
     branches:
       - main
 
-# action 名称
-name: Contributes
-
 jobs:
-  # 任务
   contrib-readme-en-job:
     runs-on: ubuntu-latest
     name: A job to automate contrib in readme

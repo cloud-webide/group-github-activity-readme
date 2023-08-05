@@ -38,9 +38,17 @@ jobs:
         run: pnpm run format:check
       - name: Build
         run: pnpm run build
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
       - uses: actions/upload-artifact@v3
         with:
-          name: group-github-activity-readme # name：上传的artifact的名称，下载的时候需要使用。
+          name: group-github-activity-readme # name：上传的 artifact 的名称，下载的时候需要使用。
           path: |
             ./
             !src
@@ -93,12 +101,7 @@ jobs:
       #   with:
       #     tag_name: v${{ steps.package-version.outputs.version }}
       #     release_name: Release v${{ steps.package-version.outputs.version }}
-      # TODO: 一直会报错，先注释。 https://github.com/cloud-webide/group-github-activity-readme/actions/runs/5770035121/job/15642692274
-      # 美化 release 页内容 use https://github.com/antfu/changelogithub
-      - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
-        if: ${{ steps.release.outputs.release_created }}
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      # 会自动提 pr，但是不会自动合并，需要手动合并。 合并通过之后回自动 release
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: release
         with:
